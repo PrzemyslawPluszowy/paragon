@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "89587621564",
+    "project_id": "simple-recipe-pl",
+    "storage_bucket": "simple-recipe-pl.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:89587621564:android:540c34630f883221e2bab9",
+        "android_client_info": {
+          "package_name": "com.example.rcp_new"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "89587621564-5rh3onq7dhsegs4sdgl3q5sa7fq4t6cc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACgqEtsBtrEWH0Nf0eiTQhys96NANJ-nI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "89587621564-5rh3onq7dhsegs4sdgl3q5sa7fq4t6cc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
