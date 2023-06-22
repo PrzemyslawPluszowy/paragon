@@ -144,7 +144,9 @@ class AuthDataSourceImpl implements AuthDataSource {
               user.user!.displayName ?? user.user!.email!, user.user!.uid);
         }
       }
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override

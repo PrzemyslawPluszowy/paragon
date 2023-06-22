@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:rcp_new/Features/Auth/presentation/pages/forget_pass_screen.dart';
 
 import 'package:rcp_new/Features/Auth/presentation/pages/register_screen.dart';
-import 'package:rcp_new/Features/MainScreen/presentation/pages/main_screen.dart';
+import 'package:rcp_new/Features/MainScreen/pages/main_screen.dart';
 import 'package:rcp_new/core/routing/auth_guard.dart';
 import 'package:rcp_new/main.dart';
 

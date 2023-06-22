@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:edge_detection/edge_detection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rcp_new/Features/Auth/presentation/cubit/register_cubit.dart';
+import 'package:rcp_new/Features/HomeScreen/camera_controller.dart';
 
 import '../../Features/Auth/auth_data_source.dart';
 import '../../Features/Auth/presentation/cubit/login_cubit.dart';
@@ -21,9 +23,13 @@ initDi() async {
   //Auth Data Source
   getIt.registerLazySingleton<AuthDataSource>(() => AuthDataSourceImpl(
       firebaseAuth: getIt.call(), firebaseFirestore: getIt.call()));
+//camera controller repository
+  getIt.registerLazySingleton<CameraController>(
+      () => CameraControllerImpl(edgeDetection: getIt.call()));
 
 //Firebase
   getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
   getIt.registerLazySingleton<FirebaseFirestore>(
       () => FirebaseFirestore.instance);
+  getIt.registerLazySingleton<EdgeDetection>(() => EdgeDetection());
 }

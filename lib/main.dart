@@ -4,10 +4,13 @@ import 'package:rcp_new/Features/Auth/presentation/cubit/auth_routing_cubit.dart
 import 'package:rcp_new/Features/Auth/presentation/cubit/forget_pass_cubit.dart';
 import 'package:rcp_new/Features/Auth/presentation/cubit/login_cubit.dart';
 import 'package:rcp_new/Features/Auth/presentation/pages/login_screen.dart';
-import 'package:rcp_new/Features/MainScreen/presentation/pages/main_screen.dart';
+import 'package:rcp_new/Features/HomeScreen/cubit/homescreen_cubit.dart';
+import 'package:rcp_new/Features/HomeScreen/pages/home_screen.dart';
+import 'package:rcp_new/Features/MainScreen/pages/main_screen.dart';
 import 'package:rcp_new/core/injection/injection.dart';
 import 'package:rcp_new/firebase_options.dart';
 import 'Features/Auth/presentation/cubit/register_cubit.dart';
+import 'Features/MainScreen/cubit/mainscreen_cubit.dart';
 import 'core/routing/routing.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -37,7 +40,11 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => ForgetPassCubit(authRepository: getIt.call()),
-        )
+        ),
+        BlocProvider(create: (context) => MainscreenCubit()),
+        BlocProvider(
+            create: (context) =>
+                HomescreenCubit(cameraController: getIt.call())),
       ],
       child: MaterialApp.router(
         title: 'RecipeScaner',

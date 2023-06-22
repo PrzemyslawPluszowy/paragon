@@ -47,9 +47,9 @@ dependencies:
   flutter_bloc: ^8.1.2
   equatable: ^2.0.5
   image_picker: ^0.8.7+4
-  flutter_svg: ^2.0.5
+  flutter_svg: ^2.0.7
   fluttertoast: ^8.2.1
-  modal_bottom_sheet: ^2.1.2
+  modal_bottom_sheet: ^3.0.0-pre
   path_provider: ^2.0.15
   google_fonts: ^4.0.4
   fl_chart: ^0.63.0
@@ -57,6 +57,16 @@ dependencies:
   path: any
   google_sign_in: ^6.1.4
   flutter_facebook_auth: ^5.0.11
+  # edge_detection: ^1.1.1
+  permission_handler: ^10.3.0
+  # cunning_document_scanner: ^1.1.2
+  # chromepaydocscanner: ^0.0.8
+  # docscan: ^1.0.5
+  # mlkit_scanner: ^0.5.2
+  # documentscannerchromepay: ^0.0.1
+  # cuervo_document_scanner: ^1.0.
+  edge_detection:
+   path: /Users/misiek440/flutterdev/edge/edge_detection-master/
 
 dev_dependencies:
   flutter_test:
@@ -81,9 +91,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/appBar.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -2,6 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+
 <key>CFBundleURLTypes</key>
 <array>
 	<dict>
@@ -9,8 +10,7 @@
 		<string>Editor</string>
 		<key>CFBundleURLSchemes</key>
 		<array>
-			<!-- TODO Replace this value: -->
-			<!-- Copied from GoogleService-Info.plist key REVERSED_CLIENT_ID -->
+		
 			<string>com.googleusercontent.apps.89587621564-ctfuj36b2vngqrb4dghktubnn9jg47sb</string>
 
 		</array>
@@ -47,6 +47,9 @@
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>
+	
+
+
 
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -66,5 +69,16 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+
+	<string>Need to upload image</string>
+
+	<key>NSCameraUsageDescription</key>
+
+	<string>Need to upload image</string>
+
+	<key>NSMicrophoneUsageDescription</key>
+
+	<string>Need to upload image</string>
 </dict>
 </plist>
