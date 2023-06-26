@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:rcp_new/Features/Auth/presentation/pages/forget_pass_screen.dart';
 
-import 'package:rcp_new/Features/Auth/presentation/pages/register_screen.dart';
-import 'package:rcp_new/Features/MainScreen/pages/main_screen.dart';
 import 'package:rcp_new/core/routing/auth_guard.dart';
 import 'package:rcp_new/main.dart';
 
-import '../../Features/Auth/presentation/pages/login_screen.dart';
-import '../../Features/Auth/repository.dart';
+import '../../Features/auth_screens/presentation/pages/forget_pass_screen.dart';
+import '../../Features/auth_screens/presentation/pages/login_screen.dart';
+import '../../Features/auth_screens/presentation/pages/register_screen.dart';
+import '../../Features/auth_screens/repository.dart';
+import '../../Features/choise_mode_screen/bill_model.dart';
+import '../../Features/AddBill/pages/bill_screen.dart';
+import '../../Features/main_screen/pages/main_screen.dart';
 
 class RouteConfig {
   final AuthRepository authRepository;
@@ -44,7 +46,15 @@ class RouteConfig {
     GoRoute(
       path: '/forgot-pass',
       builder: (context, state) => const ForgotPassScreen(),
-    )
+    ),
+    GoRoute(
+      path: '/bill',
+      builder: (context, state) {
+        return BillAddScreen(
+          bill: state.extra! as BillModel,
+        );
+      },
+    ),
   ], redirect: (context, state) => _redirect(context, state));
 }
 

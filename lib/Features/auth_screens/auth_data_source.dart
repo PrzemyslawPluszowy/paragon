@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:rcp_new/Features/Auth/user_model.dart';
+import 'package:rcp_new/Features/auth_screens/user_model.dart';
 import 'package:rcp_new/core/exceptions/auth_exception.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rcp_new/core/theme/theme.dart';

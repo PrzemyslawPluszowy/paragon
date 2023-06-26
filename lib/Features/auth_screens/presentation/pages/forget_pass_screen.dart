@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:rcp_new/Features/Auth/presentation/cubit/forget_pass_cubit.dart';
 import 'package:rcp_new/core/theme/theme.dart';
 import 'package:rcp_new/shared/global_widget/responsive_widget.dart';
+import '../cubit/forget_pass_cubit.dart';
 import '../widgets/custom_form_field.dart';
 import '../widgets/custom_send_button.dart';
 import '../widgets/error_box_widget.dart';

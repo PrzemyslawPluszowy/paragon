@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edge_detection/edge_detection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
-import 'package:rcp_new/Features/Auth/presentation/cubit/register_cubit.dart';
-import 'package:rcp_new/Features/HomeScreen/camera_controller.dart';
-
-import '../../Features/Auth/auth_data_source.dart';
-import '../../Features/Auth/presentation/cubit/login_cubit.dart';
-import '../../Features/Auth/repository.dart';
+import '../../Features/auth_screens/auth_data_source.dart';
+import '../../Features/auth_screens/presentation/cubit/login_cubit.dart';
+import '../../Features/auth_screens/presentation/cubit/register_cubit.dart';
+import '../../Features/auth_screens/repository.dart';
+import '../../Features/choise_mode_screen/camera_controller.dart';
+import '../../Features/choise_mode_screen/ocr_controller.dart';
 
 final getIt = GetIt.instance;
 
@@ -26,6 +26,7 @@ initDi() async {
 //camera controller repository
   getIt.registerLazySingleton<CameraController>(
       () => CameraControllerImpl(edgeDetection: getIt.call()));
+  getIt.registerLazySingleton<OcrController>(() => OcrControllerImpl());
 
 //Firebase
   getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);

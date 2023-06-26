@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:rcp_new/Features/Auth/repository.dart';
+
+import '../../repository.dart';
 
 part 'login_state.dart';
 

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rcp_new/shared/global_widget/responsive_widget.dart';
 
-import '../../HomeScreen/pages/home_screen.dart';
+import '../../choise_mode_screen/pages/choice_mode_screen.dart';
 import '../cubit/mainscreen_cubit.dart';
 
 const List<Widget> _widgetOptions = <Widget>[
-  HomeScreen(),
+  AddRecipeScreen(),
   Text(
     'Index 1: Profile',
   ),
