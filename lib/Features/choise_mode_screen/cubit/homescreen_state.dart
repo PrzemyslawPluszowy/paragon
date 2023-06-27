@@ -10,21 +10,21 @@ class AddRecipeState extends Equatable {
       required this.imagePath,
       required this.companyName});
   final bool isLoading;
-  final String? imagePath;
+  final String imagePath;
   final CompanyModel? companyName;
-  final List<String>? listItems;
-  final List<String>? listPrice;
-  final DateTime? date;
-  final List<String>? categoryList;
+  final List<String> listItems;
+  final List<String> listPrice;
+  final DateTime date;
+  final List<String> categoryList;
 
   factory AddRecipeState.initail() {
-    return const AddRecipeState(
-        imagePath: null,
+    return AddRecipeState(
+        imagePath: '',
         companyName: null,
-        listItems: null,
-        listPrice: null,
-        date: null,
-        categoryList: [],
+        listItems: const [],
+        listPrice: const [],
+        date: DateTime.now(),
+        categoryList: const [],
         isLoading: false);
   }
   AddRecipeState copyWith(
@@ -38,11 +38,11 @@ class AddRecipeState extends Equatable {
     return AddRecipeState(
         categoryList: categoryList ?? this.categoryList,
         isLoading: isLoading ?? this.isLoading,
-        imagePath: imagePath,
+        imagePath: imagePath ?? this.imagePath,
         companyName: companyName,
-        listItems: listItems,
-        listPrice: listPrice,
-        date: date);
+        listItems: listItems ?? this.listItems,
+        listPrice: listPrice ?? this.listPrice,
+        date: date ?? this.date);
   }
 
   @override
@@ -55,23 +55,4 @@ class AddRecipeState extends Equatable {
         categoryList,
         isLoading
       ];
-}
-
-class AddRecipeLoaded extends AddRecipeState {
-  const AddRecipeLoaded(
-      {required List<String>? categoryList,
-      required bool isLoading,
-      required List<String>? listItems,
-      required List<String>? listPrice,
-      required DateTime? date,
-      required String? imagePath,
-      required CompanyModel? companyName})
-      : super(
-            categoryList: categoryList,
-            isLoading: isLoading,
-            listItems: listItems,
-            listPrice: listPrice,
-            date: date,
-            imagePath: imagePath,
-            companyName: companyName);
 }

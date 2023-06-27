@@ -34,15 +34,14 @@ class AddRecipeScreen extends StatelessWidget {
             backgroundColor: FigmaColorsAuth.darkFiolet),
         body: BlocListener<AddRecipeCubit, AddRecipeState>(
           listener: (context, state) {
-            print(state.imagePath);
-            if (state.imagePath != null) {
+            if (state.imagePath != '') {
               context.push('/bill',
                   extra: BillModel(
-                    companyName: state.companyName!,
-                    date: state.date!,
-                    imagePath: state.imagePath!,
-                    listPrice: state.listPrice!,
-                    listItems: state.listItems ?? [],
+                    companyName: state.companyName,
+                    date: state.date,
+                    imagePath: state.imagePath,
+                    listPrice: state.listPrice,
+                    listItems: state.listItems,
                     categoryList: [],
                   ));
             }
