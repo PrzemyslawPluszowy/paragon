@@ -8,16 +8,18 @@ class CustomTextFormField extends StatelessWidget {
     this.isClickable = true,
     required this.labelTextl,
     this.keyboardType = TextInputType.text,
-    this.value,
-    this.onChanged,
     this.onTap,
+    this.validator,
+    this.onChanged,
+    required this.textEditingController,
   });
   final bool isClickable;
   final String labelTextl;
   final TextInputType keyboardType;
-  final String? value;
-  final Function(String)? onChanged;
+  final TextEditingController textEditingController;
   final Function()? onTap;
+  final String? Function(String?)? validator;
+  final Function(String?)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -27,28 +29,23 @@ class CustomTextFormField extends StatelessWidget {
         horizontal: 20,
       ),
       child: TextFormField(
+        controller: textEditingController,
         style: const TextStyle(color: FigmaColorsAuth.white),
-        controller: TextEditingController(text: value),
-        onChanged: (value) async {},
         onTap: () {
           isClickable ? null : FocusScope.of(context).requestFocus(FocusNode());
           onTap != null ? onTap!() : null;
         },
+        validator: validator,
         readOnly: !isClickable,
         keyboardType: keyboardType,
         decoration: InputDecoration(
+          errorStyle: TextStyle(color: FigmaColorsAuth.white.withOpacity(0.7)),
           enabledBorder: const UnderlineInputBorder(
             borderSide: BorderSide(color: FigmaColorsAuth.white),
           ),
-
-          // filled: true,
           fillColor: FigmaColorsAuth.white,
           labelText: labelTextl,
           labelStyle: const TextStyle(color: FigmaColorsAuth.white),
-          // focusedBorder: const OutlineInputBorder(
-          //     borderSide: BorderSide(color: FigmaColorsAuth.darkFiolet)),
-          // enabledBorder: const OutlineInputBorder(
-          //     borderSide: BorderSide(color: FigmaColorsAuth.darkFiolet)),
         ),
       ),
     );

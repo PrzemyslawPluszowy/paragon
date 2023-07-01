@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edge_detection/edge_detection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:rcp_new/Features/bil_screen/data/bill_repo.dart';
 import '../../Features/auth_screens/auth_data_source.dart';
 import '../../Features/auth_screens/presentation/cubit/login_cubit.dart';
 import '../../Features/auth_screens/presentation/cubit/register_cubit.dart';
@@ -28,7 +30,12 @@ initDi() async {
       () => CameraControllerImpl(edgeDetection: getIt.call()));
   getIt.registerLazySingleton<OcrController>(() => OcrControllerImpl());
 
+  // bill repo
+  getIt.registerLazySingleton<BillRepo>(() => BillRepoImpl(
+      firebaseFirestore: getIt.call(), firebaseStorage: getIt.call()));
+
 //Firebase
+  getIt.registerLazySingleton<FirebaseStorage>(() => FirebaseStorage.instance);
   getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
   getIt.registerLazySingleton<FirebaseFirestore>(
       () => FirebaseFirestore.instance);

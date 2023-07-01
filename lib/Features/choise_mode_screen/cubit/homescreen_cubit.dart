@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +18,7 @@ class AddRecipeCubit extends Cubit<AddRecipeState> {
   final OcrController ocrController;
 
   Future<void> initCamera() async {
+    emit(AddRecipeState.initail());
     try {
       emit(state.copyWith(isLoading: true));
 
@@ -32,7 +34,15 @@ class AddRecipeCubit extends Cubit<AddRecipeState> {
       }
     } catch (e) {
       debugPrint(e.toString());
-      Fluttertoast.showToast(msg: e.toString());
+
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        toastLength: Toast.LENGTH_LONG,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+        timeInSecForIosWeb: 10,
+      );
     }
   }
 
@@ -50,49 +60,7 @@ class AddRecipeCubit extends Cubit<AddRecipeState> {
         listItems: listItems,
         listPrice: listPrice,
         categoryList: categoryList,
-        date: date,
+        date: Timestamp.fromDate(date ?? DateTime.now()),
         companyName: companyName));
-  }
-
-  showDatePic(context) async {
-    final date = await showDatePicker(
-            context: context,
-            initialDate: state.date,
-            firstDate: DateTime(1900),
-            lastDate: DateTime(2100)) ??
-        DateTime.now();
-    emit(state.copyWith(
-      date: date,
-    ));
-  }
-
-  addTask(String taskName) {
-    final listItems = [...state.listItems, taskName];
-    emit(state.copyWith(listItems: listItems));
-  }
-
-  editTask(String taskName, int index) {
-    final listItems = [...state.listItems];
-    listItems[index] = taskName;
-    emit(state.copyWith(listItems: listItems));
-  }
-
-  deleteTask(int index) {
-    final listItems = [...state.listItems];
-    listItems.removeAt(index);
-    emit(state.copyWith(listItems: listItems));
-  }
-
-  restetState() {
-    emit(AddRecipeState.initail());
-  }
-
-  nameInput(String value) {
-    // emit(state.copyWith(title: value));
-    // print(state.title);
-  }
-
-  companySelect() {
-    // emit(state.companyName.name);
   }
 }

@@ -14,7 +14,7 @@ class AddRecipeState extends Equatable {
   final CompanyModel? companyName;
   final List<String> listItems;
   final List<String> listPrice;
-  final DateTime date;
+  final Timestamp date;
   final List<String> categoryList;
 
   factory AddRecipeState.initail() {
@@ -23,7 +23,7 @@ class AddRecipeState extends Equatable {
         companyName: null,
         listItems: const [],
         listPrice: const [],
-        date: DateTime.now(),
+        date: Timestamp.now(),
         categoryList: const [],
         isLoading: false);
   }
@@ -34,7 +34,7 @@ class AddRecipeState extends Equatable {
       CompanyModel? companyName,
       List<String>? listItems,
       List<String>? listPrice,
-      DateTime? date}) {
+      Timestamp? date}) {
     return AddRecipeState(
         categoryList: categoryList ?? this.categoryList,
         isLoading: isLoading ?? this.isLoading,
