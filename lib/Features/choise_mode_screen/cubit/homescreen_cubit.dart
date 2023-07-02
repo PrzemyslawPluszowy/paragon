@@ -26,6 +26,7 @@ class AddRecipeCubit extends Cubit<AddRecipeState> {
       String? filePatch = await cameraController.genrateFilePath();
       String? imagePath =
           await cameraController.takePicture(permission, filePatch);
+      emit(state.copyWith(isLoading: false));
       if (imagePath != null) {
         emit(state.copyWith(isLoading: true, imagePath: imagePath));
         initOcr();

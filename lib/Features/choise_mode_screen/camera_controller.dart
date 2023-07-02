@@ -21,7 +21,8 @@ class CameraControllerImpl implements CameraController {
         bool success = await EdgeDetection.detectEdge(
           filePath,
           canUseGallery: true,
-          androidScanTitle: 'Scanning', // use custom localizations for android
+          androidScanTitle:
+              'Skanowanie', // use custom localizations for android
           androidCropTitle: 'Crop',
           androidCropBlackWhiteTitle: 'Black White',
           androidCropReset: 'Reset',

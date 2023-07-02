@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:rcp_new/Features/category_select/cubit/category_select_cubit.dart';
+import 'package:rcp_new/Features/documents/cubit/documets_screen_cubit.dart';
 import 'package:rcp_new/core/data/bill_model.dart';
 import 'package:rcp_new/core/theme/theme.dart';
 
@@ -36,19 +37,29 @@ class _BillAddScreenState extends State<BillAddScreen> {
   List<String> _listItems = [];
   late double _price;
   late String? _imagePath;
+  late String? _type;
   late TextEditingController _nameController;
   late TextEditingController _priceController;
   late TextEditingController _categoryController;
   late TextEditingController _companyNameController;
 
   late TextEditingController _dateController;
-  double guaranteeTime = 0;
+  double _guaranteeTime = 0;
 
-  bool isGuarantee = false;
+  bool _isGuarantee = false;
 
   @override
   void initState() {
     super.initState();
+    if (widget.bill.guaranteeDate != null) {
+      _guaranteeTime = double.parse(
+          (Jiffy.parseFromDateTime(widget.bill.guaranteeDate!.toDate())
+              .to(Jiffy.now(), withPrefixAndSuffix: false)
+              .split(' ')
+              .first));
+    }
+    _isGuarantee = widget.bill.guaranteeDate != null;
+    _type = widget.bill.type;
     _id = widget.bill.billId;
     _userId = widget.bill.userId;
     _dateCreated = DateTime.fromMillisecondsSinceEpoch(
@@ -62,6 +73,7 @@ class _BillAddScreenState extends State<BillAddScreen> {
     _listItems = [...widget.bill.listItems ?? []];
     _price = widget.bill.price ?? 0;
     _imagePath = widget.bill.imagePath;
+    _name = widget.bill.name ?? '';
 
     _nameController = TextEditingController(text: widget.bill.name);
     _nameController.addListener(() {
@@ -107,10 +119,11 @@ class _BillAddScreenState extends State<BillAddScreen> {
                 child: Column(
                   children: [
                     ImageBillWidget(
-                      save: () async {
+                      isEdit: _id != null && _id!.isNotEmpty,
+                      save: () {
                         if (_formKey.currentState!.validate()) {
                           final newBill = DocumentModel(
-                            type: widget.bill.type,
+                            type: _type,
                             category: _category,
                             companyName: _companyName,
                             dateCreated: Timestamp.fromDate(_dateCreated),
@@ -125,12 +138,17 @@ class _BillAddScreenState extends State<BillAddScreen> {
                             billId: _id,
                           );
                           if (_id != null && _id!.isNotEmpty) {
-                            // TODO: update bill
-                            // await context
-                            //     .read<BillCubit>()
-                            //     .updateBill(newBill, _id!);
+                            context
+                                .read<BillCubit>()
+                                .updadateBill(bill: newBill);
+                            context
+                                .read<DocumetsScreenCubit>()
+                                .refreshDocument();
                           } else {
-                            await context.read<BillCubit>().saveBill(newBill);
+                            context.read<BillCubit>().saveBill(newBill);
+                            context
+                                .read<DocumetsScreenCubit>()
+                                .refreshDocument();
                           }
 
                           if (context.mounted) {
@@ -203,27 +221,26 @@ class _BillAddScreenState extends State<BillAddScreen> {
                       height: 20,
                     ),
                     Row(
-                      mainAxisAlignment: isGuarantee
+                      mainAxisAlignment: _isGuarantee
                           ? MainAxisAlignment.spaceBetween
                           : MainAxisAlignment.end,
                       children: [
-                        isGuarantee
+                        _isGuarantee
                             ? Flexible(
                                 flex: 3,
                                 child: Slider(
                                   activeColor: FigmaColorsAuth.lightFiolet,
-                                  value: guaranteeTime,
+                                  value: _guaranteeTime,
                                   max: 60,
                                   divisions: 60,
-                                  label: guaranteeTime.round().toString(),
+                                  label: _guaranteeTime.round().toString(),
                                   onChanged: (double value) {
                                     setState(() {
-                                      guaranteeTime = value;
-                                      _guaranteeDate =
-                                          Jiffy.parseFromDateTime(_dateCreated)
-                                              .add(
-                                                  months: guaranteeTime.round())
-                                              .dateTime;
+                                      _guaranteeTime = value;
+                                      _guaranteeDate = Jiffy.parseFromDateTime(
+                                              _dateCreated)
+                                          .add(months: _guaranteeTime.round())
+                                          .dateTime;
                                     });
                                   },
                                 ),
@@ -237,10 +254,10 @@ class _BillAddScreenState extends State<BillAddScreen> {
                         Flexible(
                           child: Switch(
                               activeColor: FigmaColorsAuth.white,
-                              value: isGuarantee,
+                              value: _isGuarantee,
                               onChanged: (value) {
                                 setState(() {
-                                  isGuarantee = value;
+                                  _isGuarantee = value;
                                 });
                               }),
                         ),

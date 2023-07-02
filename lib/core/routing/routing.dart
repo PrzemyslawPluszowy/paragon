@@ -44,31 +44,30 @@ class RouteConfig {
       builder: (context, state) => const ForgotPassScreen(),
     ),
     GoRoute(
-        path: '/main',
+      path: '/main',
+      builder: (context, state) {
+        return const MainScreen();
+      },
+    ),
+    GoRoute(
+        path: '/bill',
         builder: (context, state) {
-          return const MainScreen();
+          return BillAddScreen(
+            bill: state.extra as DocumentModel,
+          );
         },
         routes: [
           GoRoute(
-              path: 'bill',
+              path: 'select',
               builder: (context, state) {
-                return BillAddScreen(
-                  bill: state.extra as DocumentModel,
-                );
-              },
-              routes: [
-                GoRoute(
-                    path: 'select',
-                    builder: (context, state) {
-                      return const CtagorySelectScreen();
-                    }),
-                GoRoute(
-                    path: 'image',
-                    builder: (context, state) {
-                      return FullImageScreen(imagePath: state.extra as String);
-                    }),
-              ]),
-        ])
+                return const CtagorySelectScreen();
+              }),
+          GoRoute(
+              path: 'image',
+              builder: (context, state) {
+                return FullImageScreen(imagePath: state.extra as String);
+              }),
+        ]),
   ], redirect: (context, state) => _redirect(context, state));
 }
 

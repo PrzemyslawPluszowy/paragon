@@ -12,9 +12,11 @@ class ImageBillWidget extends StatelessWidget {
     super.key,
     required this.save,
     required this.imagePath,
+    required this.isEdit,
   });
   final Function() save;
   final String imagePath;
+  final bool isEdit;
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
@@ -27,14 +29,17 @@ class ImageBillWidget extends StatelessWidget {
                 width: double.infinity,
                 height: 200,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: FigmaColorsAuth.darkFiolet.withOpacity(0.3),
-                    width: 2,
-                  ),
-                  image: DecorationImage(
-                      image: FileImage(File(imagePath)), fit: BoxFit.cover),
-                ),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: FigmaColorsAuth.darkFiolet.withOpacity(0.3),
+                      width: 2,
+                    ),
+                    image: !isEdit
+                        ? DecorationImage(
+                            image: FileImage(File(imagePath)),
+                            fit: BoxFit.cover)
+                        : DecorationImage(
+                            image: NetworkImage(imagePath), fit: BoxFit.cover)),
               );
             },
           ),

@@ -35,7 +35,7 @@ class AddRecipeScreen extends StatelessWidget {
         body: BlocListener<AddRecipeCubit, AddRecipeState>(
           listener: (context, state) {
             if (state.imagePath != '') {
-              context.push('/main/bill',
+              context.push('/bill',
                   extra: DocumentModel(
                       type: DocumentType.bill.toString().split('.').last,
                       dateCreated: state.date,
@@ -54,7 +54,7 @@ class AddRecipeScreen extends StatelessWidget {
                   ? Container(
                       width: double.infinity,
                       height: double.infinity,
-                      color: Colors.black45,
+                      color: const Color.fromARGB(115, 255, 255, 255),
                       child: const Center(child: CircularProgressIndicator()))
                   : SingleChildScrollView(
                       physics: const ClampingScrollPhysics(),

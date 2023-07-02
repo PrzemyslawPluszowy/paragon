@@ -1,10 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:rcp_new/Features/documents/data/bill_get_repo.dart';
-
 import '../../../core/data/bill_model.dart';
 import '../pages/documents_screen.dart';
-
 part 'documets_screen_state.dart';
 
 class DocumetsScreenCubit extends Cubit<DocumetsScreenState> {
@@ -30,6 +28,13 @@ class DocumetsScreenCubit extends Cubit<DocumetsScreenState> {
     // emit(state.copyWith(isLoading: true));
     // await billGetRepo.editBill(id: id);
     // emit(state.copyWith(isLoading: false));
+  }
+
+  refreshDocument() async {
+    emit(DocumetsScreenState.initail());
+    emit(state.copyWith(isLoading: true));
+    billGetRepo.refreshDocument();
+    loadBills();
   }
 
   loadBills() async {

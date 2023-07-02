@@ -11,6 +11,7 @@ import '../../../core/data/bill_model.dart';
 abstract class BillRepo {
   Future saveBill({required DocumentModel bill});
   Future saveBilImage({required String path, required String billId});
+  Future updateBill({required DocumentModel bill});
 }
 
 class BillRepoImpl implements BillRepo {
@@ -75,5 +76,13 @@ class BillRepoImpl implements BillRepo {
       Fluttertoast.showToast(msg: e.toString());
     }
     return url;
+  }
+
+  @override
+  Future updateBill({required DocumentModel bill}) async {
+    await firebaseFirestore
+        .collection('bills')
+        .doc(bill.billId)
+        .update(bill.toJson());
   }
 }
