@@ -145,7 +145,12 @@ class AuthDataSourceImpl implements AuthDataSource {
         }
       }
     } catch (e) {
-      print(e);
+      Fluttertoast.showToast(
+          backgroundColor: FigmaColorsAuth.lightFiolet,
+          textColor: FigmaColorsAuth.white,
+          msg: 'Something went wrong, try again or use another method',
+          toastLength: Toast.LENGTH_LONG,
+          timeInSecForIosWeb: 4);
     }
   }
 

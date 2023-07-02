@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rcp_new/Features/documents/pages/documents_screen.dart';
 import 'package:rcp_new/shared/global_widget/responsive_widget.dart';
 
 import '../../choise_mode_screen/pages/choice_mode_screen.dart';
 import '../cubit/mainscreen_cubit.dart';
 
-const List<Widget> _widgetOptions = <Widget>[
-  AddRecipeScreen(),
-  Text(
-    'Index 1: Profile',
-  ),
-  Text(
+List<Widget> _widgetOptions = <Widget>[
+  const AddRecipeScreen(),
+  const DocumentsScreen(),
+  const Text(
     'Index 2: Settings',
   ),
 ];
@@ -39,9 +38,10 @@ class MainPhoneScreen extends StatelessWidget {
                 context.read<MainscreenCubit>().changePage(index);
               },
               items: const [
-                BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
                 BottomNavigationBarItem(
-                    icon: Icon(Icons.person_outline), label: 'Profile'),
+                    icon: Icon(Icons.document_scanner), label: 'Home'),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.edit_document), label: 'Documents'),
                 BottomNavigationBarItem(
                     icon: Icon(Icons.settings), label: 'Settings'),
               ],

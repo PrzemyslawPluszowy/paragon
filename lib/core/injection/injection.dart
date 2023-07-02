@@ -10,6 +10,7 @@ import '../../Features/auth_screens/presentation/cubit/register_cubit.dart';
 import '../../Features/auth_screens/repository.dart';
 import '../../Features/choise_mode_screen/camera_controller.dart';
 import '../../Features/choise_mode_screen/ocr_controller.dart';
+import '../../Features/documents/bill_get_repo.dart';
 
 final getIt = GetIt.instance;
 
@@ -25,15 +26,19 @@ initDi() async {
   //Auth Data Source
   getIt.registerLazySingleton<AuthDataSource>(() => AuthDataSourceImpl(
       firebaseAuth: getIt.call(), firebaseFirestore: getIt.call()));
+
 //camera controller repository
   getIt.registerLazySingleton<CameraController>(
       () => CameraControllerImpl(edgeDetection: getIt.call()));
   getIt.registerLazySingleton<OcrController>(() => OcrControllerImpl());
 
-  // bill repo
+  // bill savwe repo
   getIt.registerLazySingleton<BillRepo>(() => BillRepoImpl(
       firebaseFirestore: getIt.call(), firebaseStorage: getIt.call()));
 
+  // bii get repo
+  getIt.registerLazySingleton<BillGetRepo>(
+      () => BillGetRepoImpl(firebaseFirestore: getIt.call()));
 //Firebase
   getIt.registerLazySingleton<FirebaseStorage>(() => FirebaseStorage.instance);
   getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);

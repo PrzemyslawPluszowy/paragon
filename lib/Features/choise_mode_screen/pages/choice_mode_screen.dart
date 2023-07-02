@@ -37,6 +37,7 @@ class AddRecipeScreen extends StatelessWidget {
             if (state.imagePath != '') {
               context.push('/main/bill',
                   extra: BillModel(
+                      type: DocumentType.bill.toString().split('.').last,
                       dateCreated: state.date,
                       listItems: state.listItems,
                       price: state.listPrice.isEmpty

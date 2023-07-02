@@ -110,6 +110,7 @@ class _BillAddScreenState extends State<BillAddScreen> {
                       save: () async {
                         if (_formKey.currentState!.validate()) {
                           final newBill = BillModel(
+                            type: widget.bill.type,
                             category: _category,
                             companyName: _companyName,
                             dateCreated: Timestamp.fromDate(_dateCreated),

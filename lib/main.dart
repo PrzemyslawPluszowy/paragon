@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:rcp_new/Features/bil_screen/cubit/bill_cubit.dart';
 import 'package:rcp_new/Features/category_select/cubit/category_select_cubit.dart';
+import 'package:rcp_new/Features/documents/cubit/documets_screen_cubit.dart';
 
 import 'package:rcp_new/core/injection/injection.dart';
 import 'package:rcp_new/firebase_options.dart';
@@ -49,6 +50,9 @@ class MyApp extends StatelessWidget {
                 cameraController: getIt.call(), ocrController: getIt.call())),
         BlocProvider(create: (context) => BillCubit(billRepo: getIt.call())),
         BlocProvider(create: (context) => CategorySelectCubit()..sortList()),
+        BlocProvider(
+            create: (context) =>
+                DocumetsScreenCubit(billGetRepo: getIt.call())..loadBills()),
       ],
       child: MaterialApp.router(
         title: 'RecipeScaner',

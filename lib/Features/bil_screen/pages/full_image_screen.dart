@@ -17,7 +17,7 @@ class FullImageScreen extends StatelessWidget {
         ),
       ),
       backgroundColor: FigmaColorsAuth.darkFiolet,
-      body: Container(
+      body: Center(
         child: Image.file(
           File(imagePath),
           fit: BoxFit.cover,
