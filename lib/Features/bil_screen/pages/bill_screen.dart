@@ -18,7 +18,7 @@ class BillAddScreen extends StatefulWidget {
     super.key,
     required this.bill,
   });
-  final BillModel bill;
+  final DocumentModel bill;
 
   @override
   State<BillAddScreen> createState() => _BillAddScreenState();
@@ -109,7 +109,7 @@ class _BillAddScreenState extends State<BillAddScreen> {
                     ImageBillWidget(
                       save: () async {
                         if (_formKey.currentState!.validate()) {
-                          final newBill = BillModel(
+                          final newBill = DocumentModel(
                             type: widget.bill.type,
                             category: _category,
                             companyName: _companyName,

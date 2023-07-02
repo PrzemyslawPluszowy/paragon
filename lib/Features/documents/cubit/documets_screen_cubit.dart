@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:rcp_new/Features/documents/bill_get_repo.dart';
+import 'package:rcp_new/Features/documents/data/bill_get_repo.dart';
 
 import '../../../core/data/bill_model.dart';
 import '../pages/documents_screen.dart';
@@ -17,8 +17,25 @@ class DocumetsScreenCubit extends Cubit<DocumetsScreenState> {
     emit(state.copyWith(pageSelectc: pageSelectc));
   }
 
+  deleteDocument({required String id}) async {
+    emit(state.copyWith(isLoading: true));
+    await billGetRepo.deleteBill(billId: id);
+    emit(DocumetsScreenState.initail());
+    billGetRepo.refreshDocument();
+    await loadBills();
+  }
+
+  editDocument({required String id}) async {
+    print('editDocument');
+    // emit(state.copyWith(isLoading: true));
+    // await billGetRepo.editBill(id: id);
+    // emit(state.copyWith(isLoading: false));
+  }
+
   loadBills() async {
-    List<BillModel> bills = [];
+    List<DocumentModel> bills = [];
+    List<DocumentModel> allDocuments = [];
+    List<DocumentModel> documents = [];
 
     emit(state.copyWith(isLoading: true));
     final billsFetch = await billGetRepo.getBills();
@@ -27,6 +44,12 @@ class DocumetsScreenCubit extends Cubit<DocumetsScreenState> {
     }
     await Future.delayed(const Duration(milliseconds: 2000));
     bills = [...state.bills, ...billsFetch];
-    emit(state.copyWith(bills: bills, isLoading: false));
+    allDocuments = [...state.allDocuments, ...bills];
+
+    emit(state.copyWith(
+        bills: bills,
+        allDocuments: allDocuments,
+        isLoading: false,
+        documents: documents));
   }
 }

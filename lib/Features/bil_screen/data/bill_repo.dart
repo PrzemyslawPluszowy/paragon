@@ -9,7 +9,7 @@ import 'package:uuid/uuid.dart';
 import '../../../core/data/bill_model.dart';
 
 abstract class BillRepo {
-  Future saveBill({required BillModel bill});
+  Future saveBill({required DocumentModel bill});
   Future saveBilImage({required String path, required String billId});
 }
 
@@ -23,14 +23,14 @@ class BillRepoImpl implements BillRepo {
   final FirebaseStorage firebaseStorage;
 
   @override
-  Future saveBill({required BillModel bill}) async {
+  Future saveBill({required DocumentModel bill}) async {
     try {
       final userId = FirebaseAuth.instance.currentUser!.uid;
       final billId = bill.billId ?? const Uuid().v1();
       if (bill.imagePath != null) {
         String filePath =
             await saveBilImage(path: bill.imagePath!, billId: billId);
-        BillModel newBill = BillModel(
+        DocumentModel newBill = DocumentModel(
             guaranteeDate: bill.guaranteeDate,
             name: bill.name,
             billId: billId,

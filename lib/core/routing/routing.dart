@@ -53,7 +53,7 @@ class RouteConfig {
               path: 'bill',
               builder: (context, state) {
                 return BillAddScreen(
-                  bill: state.extra as BillModel,
+                  bill: state.extra as DocumentModel,
                 );
               },
               routes: [

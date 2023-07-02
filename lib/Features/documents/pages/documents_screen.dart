@@ -50,9 +50,11 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
         BlocBuilder<DocumetsScreenCubit, DocumetsScreenState>(
             builder: (context, state) {
       final List<Widget> children = [
-        ListPage(scrollController: _scrollController, bills: state.bills),
-        ListPage(scrollController: _scrollController, bills: const []),
-        ListPage(scrollController: _scrollController, bills: const []),
+        ListPage(
+            scrollController: _scrollController, documents: state.allDocuments),
+        ListPage(scrollController: _scrollController, documents: state.bills),
+        ListPage(
+            scrollController: _scrollController, documents: state.documents),
       ];
       return Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -86,7 +88,7 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
             const SizedBox(
               height: 20,
             ),
-            Flexible(child: children[state.pageSelectc.index])
+            Flexible(flex: 10, child: children[state.pageSelectc.index])
           ]);
     }));
   }

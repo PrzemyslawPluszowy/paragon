@@ -10,7 +10,7 @@ class BillCubit extends Cubit<BillState> {
 
   final BillRepo billRepo;
 
-  saveBill(BillModel bill) async {
+  saveBill(DocumentModel bill) async {
     emit(state.copyWith(isLoading: true));
     try {
       await billRepo.saveBill(bill: bill);

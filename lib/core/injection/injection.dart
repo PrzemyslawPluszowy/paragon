@@ -10,7 +10,7 @@ import '../../Features/auth_screens/presentation/cubit/register_cubit.dart';
 import '../../Features/auth_screens/repository.dart';
 import '../../Features/choise_mode_screen/camera_controller.dart';
 import '../../Features/choise_mode_screen/ocr_controller.dart';
-import '../../Features/documents/bill_get_repo.dart';
+import '../../Features/documents/data/bill_get_repo.dart';
 
 final getIt = GetIt.instance;
 

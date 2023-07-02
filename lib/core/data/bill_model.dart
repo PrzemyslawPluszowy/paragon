@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 enum DocumentType { bill, document }
 
-class BillModel {
-  BillModel({
+class DocumentModel {
+  DocumentModel({
     this.name,
     this.billId,
     this.guaranteeDate,
@@ -44,9 +44,9 @@ class BillModel {
     };
   }
 
-  factory BillModel.fromSnapshot(DocumentSnapshot doc) {
+  factory DocumentModel.fromSnapshot(DocumentSnapshot doc) {
     final json = doc.data() as Map<String, dynamic>;
-    return BillModel(
+    return DocumentModel(
       name: json['name'],
       userId: json['id'],
       dateCreated: json['dateCreated'],
