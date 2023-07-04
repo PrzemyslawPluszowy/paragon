@@ -23,13 +23,6 @@ class DocumetsScreenCubit extends Cubit<DocumetsScreenState> {
     await loadBills();
   }
 
-  editDocument({required String id}) async {
-    print('editDocument');
-    // emit(state.copyWith(isLoading: true));
-    // await billGetRepo.editBill(id: id);
-    // emit(state.copyWith(isLoading: false));
-  }
-
   refreshDocument() async {
     emit(DocumetsScreenState.initail());
     emit(state.copyWith(isLoading: true));

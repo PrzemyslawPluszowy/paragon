@@ -10,6 +10,7 @@ abstract class OcrController {
   CompanyModel? getCompanyName(List<String> text);
   List<String>? getListItem(List<String> text);
   List<String> getCategoryList();
+  List<String>? getStringHelper(List<String> text);
 }
 
 class OcrControllerImpl implements OcrController {
@@ -99,7 +100,7 @@ class OcrControllerImpl implements OcrController {
     int endIndex =
         text.indexWhere((element) => regexEnd.hasMatch(element.toLowerCase()));
     debugPrint('start: $startIndex, end: $endIndex');
-    if (startIndex != -1 && endIndex != -1 && startIndex < endIndex) {
+    if (startIndex != -1 && endIndex != -1 && startIndex < endIndex - 1) {
       List<String> sublistList = text.sublist(startIndex + 1, endIndex - 1);
       List<String> finalList = [];
       for (var element in sublistList) {
@@ -118,5 +119,34 @@ class OcrControllerImpl implements OcrController {
   @override
   List<String> getCategoryList() {
     return companyList.map((e) => e['category'] as String).toSet().toList();
+  }
+
+  @override
+  List<String>? getStringHelper(List<String> text) {
+    List<String> finalList = [];
+    List<String> preparedList = [];
+    for (var element in text) {
+      element.replaceAll(',', ' ');
+      element.replaceAll('.', ' ');
+      element.toLowerCase();
+      element.replaceAll(RegExp(r'[,.\/\*]+'), '');
+    }
+    for (var element in text) {
+      finalList.add(element.replaceAll(
+          RegExp(r'\b(?:\d+|\w*[.,/*]\w*|\w{1,4})\b|[.,/*]',
+              caseSensitive: false),
+          ''));
+    }
+
+    for (var element in finalList) {
+      preparedList.addAll(element.toLowerCase().split(' '));
+    }
+
+    preparedList.removeWhere((element) => element.length <= 4);
+    if (preparedList.length > 20) {
+      preparedList = preparedList.sublist(0, 20);
+    }
+    finalList = preparedList.sublist(0, 20);
+    return finalList;
   }
 }

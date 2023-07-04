@@ -86,7 +86,8 @@ class ListPage extends StatelessWidget {
                   return null;
                 },
                 child: ListTile(
-                  tileColor: index.isEven ? Colors.grey[300] : Colors.white,
+                  contentPadding: const EdgeInsets.all(8),
+                  tileColor: index.isEven ? Colors.grey[700] : Colors.grey[400],
                   leading: documents[index].type == 'bill'
                       ? const CircleAvatar(
                           radius: 30,
@@ -98,41 +99,82 @@ class ListPage extends StatelessWidget {
                           child: Icon(Icons.description,
                               color: FigmaColorsAuth.darkFiolet),
                         ),
-                  title: Text(
-                    'Nazwa: ${documents[index].name}',
-                    style: const TextStyle(
-                      color: FigmaColorsAuth.darkFiolet,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  title: RichText(
+                    text: TextSpan(
+                        text: 'Nazwa: ',
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: documents[index].name,
+                            style: const TextStyle(
+                              color: FigmaColorsAuth.darknessFiolet,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        ]),
                   ),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       RichText(
                         text: TextSpan(
-                          text: documents[index].dateCreated != null
-                              ? 'Data dodania: ${DateFormat('dd-MM-yyyy').format(DateTime.fromMillisecondsSinceEpoch(state.bills[index].dateCreated!.millisecondsSinceEpoch))}'
-                              : 'brak',
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                            text: documents[index].dateCreated != null
+                                ? 'Data dodania: '
+                                : 'brak',
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: documents[index].dateCreated != null
+                                    ? DateFormat('dd-MM-yyyy').format(
+                                        DateTime.fromMillisecondsSinceEpoch(
+                                            state.bills[index].dateCreated!
+                                                .millisecondsSinceEpoch))
+                                    : 'brak',
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            ]),
                       ),
                       RichText(
                         text: TextSpan(
-                          text: documents[index].guaranteeDate != null &&
-                                  documents[index]
-                                          .guaranteeDate!
-                                          .millisecondsSinceEpoch >
-                                      DateTime.now().millisecondsSinceEpoch
-                              ? 'Koniec gwarancji: ${DateFormat('dd-MM-yyyy').format(DateTime.fromMillisecondsSinceEpoch(state.bills[index].guaranteeDate!.millisecondsSinceEpoch))}'
-                              : 'Brak gwarancji',
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                            text: documents[index].guaranteeDate != null &&
+                                    documents[index]
+                                            .guaranteeDate!
+                                            .millisecondsSinceEpoch >
+                                        DateTime.now().millisecondsSinceEpoch
+                                ? 'Koniec gwarancji: '
+                                : 'Brak gwarancji',
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: documents[index].guaranteeDate != null &&
+                                        documents[index]
+                                                .guaranteeDate!
+                                                .millisecondsSinceEpoch >
+                                            DateTime.now()
+                                                .millisecondsSinceEpoch
+                                    ? DateFormat('dd-MM-yyyy').format(
+                                        DateTime.fromMillisecondsSinceEpoch(
+                                            state.bills[index].guaranteeDate!
+                                                .millisecondsSinceEpoch))
+                                    : '',
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            ]),
                       ),
                     ],
                   ),
@@ -176,6 +218,12 @@ class ListPage extends StatelessWidget {
                                     .read<DocumetsScreenCubit>()
                                     .deleteDocument(
                                         id: documents[index].billId!);
+                                if (context.mounted) {
+                                  await context
+                                      .read<DocumetsScreenCubit>()
+                                      .refreshDocument();
+                                }
+
                                 if (context.mounted &&
                                     state.isLoading == false) {
                                   context.pop();

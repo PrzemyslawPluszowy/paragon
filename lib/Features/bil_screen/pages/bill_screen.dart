@@ -10,6 +10,7 @@ import 'package:rcp_new/Features/documents/cubit/documets_screen_cubit.dart';
 import 'package:rcp_new/core/data/bill_model.dart';
 import 'package:rcp_new/core/theme/theme.dart';
 
+import '../../choise_mode_screen/cubit/homescreen_cubit.dart';
 import '../cubit/bill_cubit.dart';
 import '../widgets/custom_form_wiget.dart';
 import '../widgets/image_bill_widget.dart';
@@ -38,11 +39,12 @@ class _BillAddScreenState extends State<BillAddScreen> {
   late double _price;
   late String? _imagePath;
   late String? _type;
+  late String? _task;
   late TextEditingController _nameController;
   late TextEditingController _priceController;
   late TextEditingController _categoryController;
   late TextEditingController _companyNameController;
-
+  late TextEditingController _taskController;
   late TextEditingController _dateController;
   double _guaranteeTime = 0;
 
@@ -96,10 +98,25 @@ class _BillAddScreenState extends State<BillAddScreen> {
     _companyNameController.addListener(() {
       _companyName = _companyNameController.text;
     });
+    _taskController = TextEditingController();
+    _taskController.addListener(() {
+      _task = _taskController.text;
+    });
     _dateController = TextEditingController(
         text: DateFormat('dd-MM-yyyy').format(
             DateTime.fromMillisecondsSinceEpoch(
                 widget.bill.dateCreated!.millisecondsSinceEpoch)));
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _priceController.dispose();
+    _categoryController.dispose();
+    _companyNameController.dispose();
+    _dateController.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -273,7 +290,7 @@ class _BillAddScreenState extends State<BillAddScreen> {
                     _listItems.isEmpty
                         ? IconButton(
                             onPressed: () {
-                              _dialogAddPosition(context);
+                              _dialogAddPosition(context, _id);
                             },
                             icon: const FaIcon(FontAwesomeIcons.circlePlus,
                                 color: Color.fromARGB(255, 255, 255, 255),
@@ -286,7 +303,7 @@ class _BillAddScreenState extends State<BillAddScreen> {
                               if (index == _listItems.length) {
                                 return IconButton(
                                     onPressed: () {
-                                      _dialogAddPosition(context);
+                                      _dialogAddPosition(context, _id);
                                     },
                                     icon: const FaIcon(
                                         FontAwesomeIcons.circlePlus,
@@ -342,33 +359,80 @@ class _BillAddScreenState extends State<BillAddScreen> {
     );
   }
 
-  Future<void> _dialogAddPosition(BuildContext context) {
+  Future<void> _dialogAddPosition(BuildContext context, String? id) {
     final formKey = GlobalKey<FormState>();
 
     return showDialog<void>(
         context: context,
         builder: (context) {
-          String taskName = '';
           return AlertDialog(
             title: const Text('Dodaj pozycje do paragonu'),
-            content: Form(
-              key: formKey,
-              child: TextFormField(
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Pole nie moze byc piuste';
-                  }
-                  return null;
-                },
-                controller: TextEditingController(),
-                decoration: const InputDecoration(
-                  hintText: 'Nazwa pozycji',
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    taskName = value;
-                  });
-                },
+            content: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.8,
+              height:
+                  id == null ? MediaQuery.of(context).size.height * 0.2 : null,
+              child: Column(
+                children: [
+                  BlocBuilder<AddRecipeCubit, AddRecipeState>(
+                    builder: (context, state) {
+                      return id == null
+                          ? const SizedBox(
+                              width: 1,
+                              height: 1,
+                            )
+                          : Expanded(
+                              flex: 10,
+                              child: GridView.builder(
+                                  shrinkWrap: true,
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                    childAspectRatio: 20 / 10,
+                                    crossAxisSpacing: 5,
+                                    mainAxisSpacing: 5,
+                                    crossAxisCount: 3,
+                                  ),
+                                  itemCount: state.listHelper.length,
+                                  itemBuilder: (context, index) => InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          String curretText =
+                                              _taskController.text;
+                                          String newText =
+                                              '$curretText ${state.listHelper[index]} ';
+                                          _taskController.text = newText;
+                                        });
+                                      },
+                                      child: Chip(
+                                          label:
+                                              Text(state.listHelper[index])))),
+                            );
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Spacer(),
+                  Flexible(
+                    flex: 3,
+                    child: Form(
+                      key: formKey,
+                      child: TextFormField(
+                        keyboardType: TextInputType.multiline,
+                        maxLines: 1,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Pole nie moze byc piuste';
+                          }
+                          return null;
+                        },
+                        controller: _taskController,
+                        decoration: const InputDecoration(
+                          hintText: 'Nazwa pozycji',
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             actions: <Widget>[
@@ -389,7 +453,7 @@ class _BillAddScreenState extends State<BillAddScreen> {
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
                     setState(() {
-                      _listItems = [..._listItems, taskName];
+                      _listItems = [..._listItems, _task ?? ''];
                     });
                     context.pop();
                   }

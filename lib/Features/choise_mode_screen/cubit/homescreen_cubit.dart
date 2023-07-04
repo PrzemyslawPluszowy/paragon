@@ -50,6 +50,8 @@ class AddRecipeCubit extends Cubit<AddRecipeState> {
   Future initOcr() async {
     final textFromImage =
         await ocrController.convertingImegetoText(state.imagePath);
+    final stringListHelper = ocrController.getStringHelper(textFromImage);
+
     final categoryList = ocrController.getCategoryList();
     final listPrice = ocrController.getListPrice(textFromImage);
     final date = ocrController.getDateFromRecipe(textFromImage);
@@ -62,6 +64,7 @@ class AddRecipeCubit extends Cubit<AddRecipeState> {
         listPrice: listPrice,
         categoryList: categoryList,
         date: Timestamp.fromDate(date ?? DateTime.now()),
-        companyName: companyName));
+        companyName: companyName,
+        listHelper: stringListHelper));
   }
 }

@@ -46,50 +46,65 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child:
-        BlocBuilder<DocumetsScreenCubit, DocumetsScreenState>(
-            builder: (context, state) {
-      final List<Widget> children = [
-        ListPage(
-            scrollController: _scrollController, documents: state.allDocuments),
-        ListPage(scrollController: _scrollController, documents: state.bills),
-        ListPage(
-            scrollController: _scrollController, documents: state.documents),
-      ];
-      return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Flexible(
-              child: SegmentedButton<PageSelect>(
-                segments: const [
-                  ButtonSegment(
-                      value: PageSelect.all,
-                      label: Text('Wszystkio'),
-                      icon: Icon(Icons.all_inbox)),
-                  ButtonSegment(
-                      value: PageSelect.bill,
-                      label: Text('Paragony'),
-                      icon: Icon(Icons.receipt)),
-                  ButtonSegment(
-                      value: PageSelect.document,
-                      label: Text('Dokumenty'),
-                      icon: Icon(Icons.document_scanner)),
-                ],
-                selectedIcon: const Icon(Icons.check),
-                selected: <PageSelect>{state.pageSelectc},
-                onSelectionChanged: (Set<PageSelect> value) {
-                  context
-                      .read<DocumetsScreenCubit>()
-                      .pageSelect(pageSelectc: value.first);
-                },
+    return Container(
+      decoration: const BoxDecoration(
+          gradient: LinearGradient(
+        transform: GradientRotation(0),
+        colors: [
+          Color(0xffdaedfd),
+          Color.fromARGB(174, 231, 183, 239),
+          Color(0xffdaedfd),
+          Colors.white,
+        ],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      )),
+      child: SafeArea(child:
+          BlocBuilder<DocumetsScreenCubit, DocumetsScreenState>(
+              builder: (context, state) {
+        final List<Widget> children = [
+          ListPage(
+              scrollController: _scrollController,
+              documents: state.allDocuments),
+          ListPage(scrollController: _scrollController, documents: state.bills),
+          ListPage(
+              scrollController: _scrollController, documents: state.documents),
+        ];
+        return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Flexible(
+                child: SegmentedButton<PageSelect>(
+                  segments: const [
+                    ButtonSegment(
+                        value: PageSelect.all,
+                        label: Text('Wszystkio'),
+                        icon: Icon(Icons.all_inbox)),
+                    ButtonSegment(
+                        value: PageSelect.bill,
+                        label: Text('Paragony'),
+                        icon: Icon(Icons.receipt)),
+                    ButtonSegment(
+                        value: PageSelect.document,
+                        label: Text('Dokumenty'),
+                        icon: Icon(Icons.document_scanner)),
+                  ],
+                  selectedIcon: const Icon(Icons.check),
+                  selected: <PageSelect>{state.pageSelectc},
+                  onSelectionChanged: (Set<PageSelect> value) {
+                    context
+                        .read<DocumetsScreenCubit>()
+                        .pageSelect(pageSelectc: value.first);
+                  },
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Flexible(flex: 10, child: children[state.pageSelectc.index])
-          ]);
-    }));
+              const SizedBox(
+                height: 20,
+              ),
+              Flexible(flex: 10, child: children[state.pageSelectc.index])
+            ]);
+      })),
+    );
   }
 }
