@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:rcp_new/core/theme/theme.dart';
+import 'package:rcp_new/core/utils/extension.dart';
 
 import '../../../core/data/bill_model.dart';
 import '../cubit/documets_screen_cubit.dart';
@@ -85,100 +86,176 @@ class ListPage extends StatelessWidget {
                   }
                   return null;
                 },
-                child: ListTile(
-                  contentPadding: const EdgeInsets.all(8),
-                  tileColor: index.isEven ? Colors.grey[700] : Colors.grey[400],
-                  leading: documents[index].type == 'bill'
-                      ? const CircleAvatar(
-                          radius: 30,
-                          child: Icon(Icons.receipt_long,
-                              color: FigmaColorsAuth.darkFiolet),
-                        )
-                      : const CircleAvatar(
-                          radius: 30,
-                          child: Icon(Icons.description,
-                              color: FigmaColorsAuth.darkFiolet),
-                        ),
-                  title: RichText(
-                    text: TextSpan(
-                        text: 'Nazwa: ',
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: documents[index].name,
-                            style: const TextStyle(
-                              color: FigmaColorsAuth.darknessFiolet,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        ]),
-                  ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                child: IntrinsicHeight(
+                  child: Row(
                     children: [
-                      RichText(
-                        text: TextSpan(
-                            text: documents[index].dateCreated != null
-                                ? 'Data dodania: '
-                                : 'brak',
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            children: [
-                              TextSpan(
-                                text: documents[index].dateCreated != null
-                                    ? DateFormat('dd-MM-yyyy').format(
-                                        DateTime.fromMillisecondsSinceEpoch(
-                                            state.bills[index].dateCreated!
-                                                .millisecondsSinceEpoch))
-                                    : 'brak',
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
+                      Container(
+                        color: index.isEven
+                            ? FigmaColorsAuth.darkFiolet
+                            : FigmaColorsAuth.darkFiolet.withOpacity(0.7),
+                        width: 70,
+                        child: Center(
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '${documents[index].guaranteeDate!.toMonthhNumber().round()}',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .copyWith(color: FigmaColorsAuth.white),
                                 ),
-                              )
-                            ]),
+                                Text(
+                                  overflow: TextOverflow.ellipsis,
+                                  'miesięcy',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall!
+                                      .copyWith(color: FigmaColorsAuth.white),
+                                  softWrap: true,
+                                ),
+                                Text(
+                                  overflow: TextOverflow.ellipsis,
+                                  'gwarancji',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall!
+                                      .copyWith(color: FigmaColorsAuth.white),
+                                  softWrap: true,
+                                ),
+                              ]),
+                        ),
                       ),
-                      RichText(
-                        text: TextSpan(
-                            text: documents[index].guaranteeDate != null &&
-                                    documents[index]
-                                            .guaranteeDate!
-                                            .millisecondsSinceEpoch >
-                                        DateTime.now().millisecondsSinceEpoch
-                                ? 'Koniec gwarancji: '
-                                : 'Brak gwarancji',
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            children: [
-                              TextSpan(
-                                text: documents[index].guaranteeDate != null &&
-                                        documents[index]
-                                                .guaranteeDate!
-                                                .millisecondsSinceEpoch >
-                                            DateTime.now()
-                                                .millisecondsSinceEpoch
-                                    ? DateFormat('dd-MM-yyyy').format(
-                                        DateTime.fromMillisecondsSinceEpoch(
-                                            state.bills[index].guaranteeDate!
-                                                .millisecondsSinceEpoch))
-                                    : '',
+                      Expanded(
+                        child: ListTile(
+                          onTap: () {
+                            context.push('/bill-detail',
+                                extra: documents[index]);
+                          },
+                          contentPadding: const EdgeInsets.all(8),
+                          tileColor: index.isEven
+                              ? Colors.grey[700]
+                              : Colors.grey[400],
+                          // leading: documents[index].guaranteeDate != null
+                          //     ? CircleAvatar(
+                          //         backgroundColor:
+                          //             const Color.fromARGB(255, 185, 129, 219),
+                          //         radius: 30,
+                          //         child: Column(
+                          //           mainAxisAlignment: MainAxisAlignment.center,
+                          //           crossAxisAlignment: CrossAxisAlignment.center,
+                          //           children: [
+                          //             Text(
+                          //               '${documents[index].guaranteeDate!.toMonthhNumber().round()}',
+                          //               style: const TextStyle(
+                          //                   color: FigmaColorsAuth.darknessFiolet),
+                          //             ),
+                          //             Text(
+                          //               overflow: TextOverflow.ellipsis,
+                          //               'miesięcy',
+                          //               style: Theme.of(context).textTheme.bodySmall,
+                          //               softWrap: true,
+                          //             )
+                          //           ],
+                          //         ))
+                          //     : const CircleAvatar(
+                          //         radius: 30,
+                          //         child: Icon(Icons.description,
+                          //             color: FigmaColorsAuth.darkFiolet),
+                          //       ),
+                          title: RichText(
+                            text: TextSpan(
+                                text: 'Nazwa: ',
                                 style: const TextStyle(
                                   color: Colors.black,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w400,
                                 ),
-                              )
-                            ]),
+                                children: [
+                                  TextSpan(
+                                    text: documents[index].name,
+                                    style: const TextStyle(
+                                      color: FigmaColorsAuth.darknessFiolet,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                ]),
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              RichText(
+                                text: TextSpan(
+                                    text: documents[index].dateCreated != null
+                                        ? 'Data dodania: '
+                                        : 'brak',
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: documents[index].dateCreated !=
+                                                null
+                                            ? DateFormat('dd-MM-yyyy').format(
+                                                DateTime.fromMillisecondsSinceEpoch(
+                                                    state
+                                                        .bills[index]
+                                                        .dateCreated!
+                                                        .millisecondsSinceEpoch))
+                                            : 'brak',
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )
+                                    ]),
+                              ),
+                              RichText(
+                                text: TextSpan(
+                                    text: documents[index].guaranteeDate !=
+                                                null &&
+                                            documents[index]
+                                                    .guaranteeDate!
+                                                    .millisecondsSinceEpoch >
+                                                DateTime.now()
+                                                    .millisecondsSinceEpoch
+                                        ? 'Koniec gwarancji: '
+                                        : 'Brak gwarancji',
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: documents[index].guaranteeDate !=
+                                                    null &&
+                                                documents[index]
+                                                        .guaranteeDate!
+                                                        .millisecondsSinceEpoch >
+                                                    DateTime.now()
+                                                        .millisecondsSinceEpoch
+                                            ? DateFormat('dd-MM-yyyy').format(
+                                                DateTime.fromMillisecondsSinceEpoch(
+                                                    state
+                                                        .bills[index]
+                                                        .guaranteeDate!
+                                                        .millisecondsSinceEpoch))
+                                            : '',
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )
+                                    ]),
+                              ),
+                            ],
+                          ),
+                          trailing:
+                              Text('${documents[index].price.toString()} PLN'),
+                        ),
                       ),
                     ],
                   ),
-                  trailing: Text('${documents[index].price.toString()} PLN'),
                 ),
               );
             },

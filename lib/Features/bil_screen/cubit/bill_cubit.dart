@@ -11,8 +11,10 @@ class BillCubit extends Cubit<BillState> {
 
   final BillRepo billRepo;
 
-  updadateBill({required DocumentModel bill}) {
-    billRepo.updateBill(bill: bill);
+  updadateBill({required DocumentModel bill}) async {
+    emit(state.copyWith(isLoading: true));
+    await billRepo.updateBill(bill: bill);
+    emit(state.copyWith(isLoading: false));
   }
 
   saveBill(DocumentModel bill) async {

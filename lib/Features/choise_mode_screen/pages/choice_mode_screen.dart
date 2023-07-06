@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:go_router/go_router.dart';
-import 'package:rcp_new/Features/auth_screens/presentation/cubit/login_cubit.dart';
 import 'package:rcp_new/core/data/bill_model.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/theme/theme.dart';
@@ -122,7 +121,7 @@ class AddRecipeScreen extends StatelessWidget {
                               right: 0,
                               child: Text(
                                   index == 1
-                                      ? 'Skanuj dokument'
+                                      ? 'Eksport to PDF'
                                       : 'Skanuj paragon',
                                   textAlign: TextAlign.center,
                                   style: Theme.of(context)

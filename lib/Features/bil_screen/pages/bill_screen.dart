@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -6,14 +5,15 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:rcp_new/Features/category_select/cubit/category_select_cubit.dart';
-import 'package:rcp_new/Features/documents/cubit/documets_screen_cubit.dart';
 import 'package:rcp_new/core/data/bill_model.dart';
 import 'package:rcp_new/core/theme/theme.dart';
+import 'package:rcp_new/core/utils/extension.dart';
 
 import '../../choise_mode_screen/cubit/homescreen_cubit.dart';
 import '../cubit/bill_cubit.dart';
+import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_form_wiget.dart';
-import '../widgets/image_bill_widget.dart';
+import '../widgets/menu_app_bar.dart';
 
 class BillAddScreen extends StatefulWidget {
   const BillAddScreen({
@@ -54,11 +54,7 @@ class _BillAddScreenState extends State<BillAddScreen> {
   void initState() {
     super.initState();
     if (widget.bill.guaranteeDate != null) {
-      _guaranteeTime = double.parse(
-          (Jiffy.parseFromDateTime(widget.bill.guaranteeDate!.toDate())
-              .to(Jiffy.now(), withPrefixAndSuffix: false)
-              .split(' ')
-              .first));
+      _guaranteeTime = widget.bill.guaranteeDate!.toMonthhNumber();
     }
     _isGuarantee = widget.bill.guaranteeDate != null;
     _type = widget.bill.type;
@@ -68,8 +64,7 @@ class _BillAddScreenState extends State<BillAddScreen> {
         widget.bill.dateCreated!.millisecondsSinceEpoch);
     _guaranteeDate = widget.bill.guaranteeDate == null
         ? null
-        : DateTime.fromMillisecondsSinceEpoch(
-            widget.bill.guaranteeDate!.millisecondsSinceEpoch);
+        : widget.bill.guaranteeDate!.toDateTimeFromTimestep();
     _companyName = widget.bill.companyName ?? '';
     _category = widget.bill.category ?? 'Inne';
     _listItems = [...widget.bill.listItems ?? []];
@@ -103,9 +98,7 @@ class _BillAddScreenState extends State<BillAddScreen> {
       _task = _taskController.text;
     });
     _dateController = TextEditingController(
-        text: DateFormat('dd-MM-yyyy').format(
-            DateTime.fromMillisecondsSinceEpoch(
-                widget.bill.dateCreated!.millisecondsSinceEpoch)));
+        text: widget.bill.dateCreated!.dateToStringFromTimestep());
   }
 
   @override
@@ -115,6 +108,7 @@ class _BillAddScreenState extends State<BillAddScreen> {
     _categoryController.dispose();
     _companyNameController.dispose();
     _dateController.dispose();
+    _taskController.dispose();
 
     super.dispose();
   }
@@ -128,238 +122,258 @@ class _BillAddScreenState extends State<BillAddScreen> {
       child: BlocBuilder<BillCubit, BillState>(
         builder: (context, state) {
           return Scaffold(
-            backgroundColor: FigmaColorsAuth.darkFiolet,
-            body: SingleChildScrollView(
-              physics: const ScrollPhysics(),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    ImageBillWidget(
-                      isEdit: _id != null && _id!.isNotEmpty,
-                      save: () {
-                        if (_formKey.currentState!.validate()) {
-                          final newBill = DocumentModel(
-                            type: _type,
-                            category: _category,
-                            companyName: _companyName,
-                            dateCreated: Timestamp.fromDate(_dateCreated),
-                            guaranteeDate: _guaranteeDate == null
-                                ? null
-                                : Timestamp.fromDate(_guaranteeDate!),
-                            imagePath: _imagePath,
-                            listItems: _listItems,
-                            name: _name,
-                            price: _price,
-                            userId: _userId,
-                            billId: _id,
-                          );
-                          if (_id != null && _id!.isNotEmpty) {
-                            context
-                                .read<BillCubit>()
-                                .updadateBill(bill: newBill);
-                            context
-                                .read<DocumetsScreenCubit>()
-                                .refreshDocument();
-                          } else {
-                            context.read<BillCubit>().saveBill(newBill);
-                            context
-                                .read<DocumetsScreenCubit>()
-                                .refreshDocument();
-                          }
-
-                          if (context.mounted) {
-                            context.go('/main');
-                          }
-                        }
-                      },
-                      imagePath: _imagePath!,
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    CustomTextFormField(
-                      textEditingController: _nameController,
-                      validator: (p0) {
-                        if (p0!.isEmpty) {
-                          return 'Wpisz nazwę';
-                        }
-                        return null;
-                      },
-                      keyboardType: TextInputType.name,
-                      labelTextl: 'Nazwa',
-                      onChanged: (value) {
-                        _name = value ?? '';
-                      },
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Flexible(
-                            flex: 3,
-                            child: CustomTextFormField(
-                              onTap: () => showDatePic(context, _dateCreated),
-                              isClickable: false,
-                              labelTextl: 'Data',
-                              keyboardType: TextInputType.datetime,
-                              textEditingController: _dateController,
-                            )),
-                        Flexible(
-                          child: CustomTextFormField(
-                            keyboardType: TextInputType.number,
+              backgroundColor: FigmaColorsAuth.darkFiolet,
+              body: Container(
+                decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                  transform: GradientRotation(180),
+                  colors: [
+                    Color(0xffdaedfd),
+                    Color(0xffdf9fea),
+                    Colors.white,
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                )),
+                child: CustomScrollView(slivers: [
+                  CustomAppBar(imagePath: _imagePath),
+                  MenuAppBarWidget(
+                      imagePath: _imagePath,
+                      formKey: _formKey,
+                      type: _type,
+                      category: _category,
+                      companyName: _companyName,
+                      dateCreated: _dateCreated,
+                      guaranteeDate: _guaranteeDate,
+                      listItems: _listItems,
+                      name: _name,
+                      price: _price,
+                      userId: _userId,
+                      id: _id),
+                  SliverToBoxAdapter(
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          CustomTextFormField(
+                            textEditingController: _nameController,
                             validator: (p0) {
-                              if (!RegExp(r'^\d+(?:\.\d{1,2})?$')
-                                  .hasMatch(p0!)) {
-                                return 'Popraw';
+                              if (p0!.isEmpty) {
+                                return 'Wpisz nazwę';
                               }
                               return null;
                             },
-                            textEditingController: _priceController,
-                            labelTextl: 'Cena',
-                          ),
-                        ),
-                      ],
-                    ),
-                    CustomTextFormField(
-                      textEditingController: _companyNameController,
-                      labelTextl: 'Nazwa firmy',
-                    ),
-                    CustomTextFormField(
-                      onTap: () {
-                        context.push('/main/bill/select',
-                            extra: _categoryController);
-                      },
-                      isClickable: false,
-                      labelTextl: 'Category',
-                      keyboardType: TextInputType.none,
-                      textEditingController: _categoryController,
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: _isGuarantee
-                          ? MainAxisAlignment.spaceBetween
-                          : MainAxisAlignment.end,
-                      children: [
-                        _isGuarantee
-                            ? Flexible(
-                                flex: 3,
-                                child: Slider(
-                                  activeColor: FigmaColorsAuth.lightFiolet,
-                                  value: _guaranteeTime,
-                                  max: 60,
-                                  divisions: 60,
-                                  label: _guaranteeTime.round().toString(),
-                                  onChanged: (double value) {
-                                    setState(() {
-                                      _guaranteeTime = value;
-                                      _guaranteeDate = Jiffy.parseFromDateTime(
-                                              _dateCreated)
-                                          .add(months: _guaranteeTime.round())
-                                          .dateTime;
-                                    });
-                                  },
-                                ),
-                              )
-                            : const Text('Gwarancja?',
-                                style: TextStyle(
-                                  color: FigmaColorsAuth.white,
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w700,
-                                )),
-                        Flexible(
-                          child: Switch(
-                              activeColor: FigmaColorsAuth.white,
-                              value: _isGuarantee,
-                              onChanged: (value) {
-                                setState(() {
-                                  _isGuarantee = value;
-                                });
-                              }),
-                        ),
-                      ],
-                    ),
-                    const Center(
-                        child: Text('Pozycje na paragonie:',
-                            style: TextStyle(
-                              color: FigmaColorsAuth.white,
-                              fontSize: 17,
-                              fontWeight: FontWeight.w700,
-                            ))),
-                    _listItems.isEmpty
-                        ? IconButton(
-                            onPressed: () {
-                              _dialogAddPosition(context, _id);
+                            keyboardType: TextInputType.name,
+                            labelTextl: 'Nazwa',
+                            onChanged: (value) {
+                              _name = value ?? '';
                             },
-                            icon: const FaIcon(FontAwesomeIcons.circlePlus,
-                                color: Color.fromARGB(255, 255, 255, 255),
-                                size: 35))
-                        : ListView.builder(
-                            itemCount: _listItems.length + 1,
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              if (index == _listItems.length) {
-                                return IconButton(
-                                    onPressed: () {
-                                      _dialogAddPosition(context, _id);
-                                    },
-                                    icon: const FaIcon(
-                                        FontAwesomeIcons.circlePlus,
-                                        color: FigmaColorsAuth.white,
-                                        size: 35));
-                              } else {
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  child: Column(
-                                    children: [
-                                      ListTile(
-                                        tileColor: FigmaColorsAuth.white,
-                                        leading:
-                                            CircleAvatar(child: Text('$index')),
-                                        title: Text(_listItems[index]),
-                                        trailing: Row(
-                                          mainAxisSize: MainAxisSize.min,
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Flexible(
+                                  flex: 3,
+                                  child: CustomTextFormField(
+                                    onTap: () =>
+                                        _showDatePic(context, _dateCreated),
+                                    isClickable: false,
+                                    labelTextl: 'Data',
+                                    keyboardType: TextInputType.datetime,
+                                    textEditingController: _dateController,
+                                  )),
+                              Flexible(
+                                child: CustomTextFormField(
+                                  keyboardType: TextInputType.number,
+                                  validator: (p0) {
+                                    if (!RegExp(r'^\d+(?:\.\d{1,2})?$')
+                                        .hasMatch(p0!)) {
+                                      return 'Popraw';
+                                    }
+                                    return null;
+                                  },
+                                  textEditingController: _priceController,
+                                  labelTextl: 'Cena',
+                                ),
+                              ),
+                            ],
+                          ),
+                          CustomTextFormField(
+                            textEditingController: _companyNameController,
+                            labelTextl: 'Nazwa firmy',
+                          ),
+                          CustomTextFormField(
+                            onTap: () {
+                              context.push('/main/bill/select',
+                                  extra: _categoryController);
+                            },
+                            isClickable: false,
+                            labelTextl: 'Category',
+                            keyboardType: TextInputType.none,
+                            textEditingController: _categoryController,
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            mainAxisAlignment: _isGuarantee
+                                ? MainAxisAlignment.spaceBetween
+                                : MainAxisAlignment.end,
+                            children: [
+                              _isGuarantee
+                                  ? Flexible(
+                                      flex: 3,
+                                      child: Slider(
+                                        activeColor:
+                                            FigmaColorsAuth.lightFiolet,
+                                        value: _guaranteeTime,
+                                        max: 60,
+                                        divisions: 60,
+                                        label:
+                                            _guaranteeTime.round().toString(),
+                                        onChanged: (double value) {
+                                          setState(() {
+                                            _guaranteeTime = value;
+                                            _guaranteeDate =
+                                                Jiffy.parseFromDateTime(
+                                                        _dateCreated)
+                                                    .add(
+                                                        months: _guaranteeTime
+                                                            .round())
+                                                    .dateTime;
+                                          });
+                                        },
+                                      ),
+                                    )
+                                  : const Text('Gwarancja?',
+                                      style: TextStyle(
+                                        color: FigmaColorsAuth.darknessFiolet,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w700,
+                                      )),
+                              Flexible(
+                                child: Switch(
+                                    activeColor: FigmaColorsAuth.darkFiolet,
+                                    value: _isGuarantee,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _isGuarantee = value;
+                                      });
+                                    }),
+                              ),
+                            ],
+                          ),
+                          const Center(
+                              child: Text('Pozycje na paragonie:',
+                                  style: TextStyle(
+                                    color: FigmaColorsAuth.darkFiolet,
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w700,
+                                  ))),
+                          _listItems.isEmpty
+                              ? IconButton(
+                                  onPressed: () {
+                                    _dialogAddPosition(context, _id);
+                                  },
+                                  icon: const FaIcon(
+                                      FontAwesomeIcons.circlePlus,
+                                      color: FigmaColorsAuth.darkFiolet,
+                                      size: 35))
+                              : ListView.builder(
+                                  itemCount: _listItems.length + 1,
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    if (index == _listItems.length) {
+                                      return IconButton(
+                                          onPressed: () {
+                                            _dialogAddPosition(
+                                              context,
+                                              _id,
+                                            );
+                                          },
+                                          icon: const FaIcon(
+                                              FontAwesomeIcons.circlePlus,
+                                              color: FigmaColorsAuth.darkFiolet,
+                                              size: 35));
+                                    } else {
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        child: Column(
                                           children: [
-                                            IconButton(
-                                                onPressed: () {
-                                                  _dialogEditPosition(context,
-                                                      _listItems[index], index);
-                                                },
-                                                icon: const Icon(Icons.edit,
-                                                    color: FigmaColorsAuth
-                                                        .darkFiolet)),
-                                            IconButton(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    _listItems.removeAt(index);
-                                                  });
-                                                },
-                                                icon: const Icon(Icons.delete,
-                                                    color: FigmaColorsAuth
-                                                        .darkFiolet)),
-                                            const Divider(height: 1),
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                  color: index.isEven
+                                                      ? FigmaColorsAuth.black
+                                                          .withOpacity(0.1)
+                                                      : FigmaColorsAuth.black
+                                                          .withOpacity(0.05)),
+                                              child: ListTile(
+                                                tileColor:
+                                                    FigmaColorsAuth.darkFiolet,
+                                                leading: CircleAvatar(
+                                                    child: Text(
+                                                  '$index',
+                                                  style: const TextStyle(
+                                                      color: FigmaColorsAuth
+                                                          .darkFiolet),
+                                                )),
+                                                title: Text(_listItems[index]),
+                                                trailing: Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    IconButton(
+                                                        onPressed: () {
+                                                          _dialogEditPosition(
+                                                              context,
+                                                              _listItems[index],
+                                                              index);
+                                                        },
+                                                        icon: const Icon(
+                                                            Icons.edit,
+                                                            color: FigmaColorsAuth
+                                                                .darkFiolet)),
+                                                    IconButton(
+                                                        onPressed: () {
+                                                          setState(() {
+                                                            _listItems.removeAt(
+                                                                index);
+                                                          });
+                                                        },
+                                                        icon: const Icon(
+                                                            Icons.delete,
+                                                            color: FigmaColorsAuth
+                                                                .darkFiolet)),
+                                                    const Divider(height: 1),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
                                           ],
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }
-                            })
-                  ],
-                ),
-              ),
-            ),
-          );
+                                      );
+                                    }
+                                  })
+                        ],
+                      ),
+                    ),
+                  ),
+                ]),
+              ));
         },
       ),
     );
   }
 
-  Future<void> _dialogAddPosition(BuildContext context, String? id) {
+  Future<void> _dialogAddPosition(
+    BuildContext context,
+    String? id,
+  ) {
     final formKey = GlobalKey<FormState>();
 
     return showDialog<void>(
@@ -375,37 +389,30 @@ class _BillAddScreenState extends State<BillAddScreen> {
                 children: [
                   BlocBuilder<AddRecipeCubit, AddRecipeState>(
                     builder: (context, state) {
-                      return id == null
-                          ? const SizedBox(
-                              width: 1,
-                              height: 1,
-                            )
-                          : Expanded(
-                              flex: 10,
-                              child: GridView.builder(
-                                  shrinkWrap: true,
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                    childAspectRatio: 20 / 10,
-                                    crossAxisSpacing: 5,
-                                    mainAxisSpacing: 5,
-                                    crossAxisCount: 3,
-                                  ),
-                                  itemCount: state.listHelper.length,
-                                  itemBuilder: (context, index) => InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          String curretText =
-                                              _taskController.text;
-                                          String newText =
-                                              '$curretText ${state.listHelper[index]} ';
-                                          _taskController.text = newText;
-                                        });
-                                      },
-                                      child: Chip(
-                                          label:
-                                              Text(state.listHelper[index])))),
-                            );
+                      return Expanded(
+                        flex: 10,
+                        child: GridView.builder(
+                            shrinkWrap: true,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              childAspectRatio: 20 / 10,
+                              crossAxisSpacing: 5,
+                              mainAxisSpacing: 5,
+                              crossAxisCount: 3,
+                            ),
+                            itemCount: state.listHelper.length,
+                            itemBuilder: (context, index) => InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    String curretText = _taskController.text;
+                                    String newText =
+                                        '$curretText ${state.listHelper[index]} ';
+                                    _taskController.text = newText;
+                                  });
+                                },
+                                child: Chip(
+                                    label: Text(state.listHelper[index])))),
+                      );
                     },
                   ),
                   const SizedBox(
@@ -421,7 +428,7 @@ class _BillAddScreenState extends State<BillAddScreen> {
                         maxLines: 1,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Pole nie moze byc piuste';
+                            return 'Pole nie moze byc puste';
                           }
                           return null;
                         },
@@ -524,7 +531,7 @@ class _BillAddScreenState extends State<BillAddScreen> {
     );
   }
 
-  showDatePic(
+  _showDatePic(
     context,
     DateTime dateTime,
   ) async {

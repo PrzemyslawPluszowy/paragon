@@ -30,6 +30,22 @@ class DocumetsScreenCubit extends Cubit<DocumetsScreenState> {
     loadBills();
   }
 
+  dropDownMenuSelect(String select) {
+    emit(state.copyWith(dropdownMenuSelect: select));
+    switch (select) {
+      case 'Po dacie ':
+        () {};
+        break;
+      case 'Po dacie gwarancji':
+        print('dsds');
+        break;
+      case 'Po nazwie':
+        print('do witch');
+        break;
+      default:
+    }
+  }
+
   loadBills() async {
     List<DocumentModel> bills = [];
     List<DocumentModel> allDocuments = [];
@@ -40,7 +56,7 @@ class DocumetsScreenCubit extends Cubit<DocumetsScreenState> {
     if (billsFetch.isEmpty) {
       emit(state.copyWith(isEndOfList: true, isLoading: false));
     }
-    await Future.delayed(const Duration(milliseconds: 2000));
+    await Future.delayed(const Duration(milliseconds: 500));
     bills = [...state.bills, ...billsFetch];
     allDocuments = [...state.allDocuments, ...bills];
 

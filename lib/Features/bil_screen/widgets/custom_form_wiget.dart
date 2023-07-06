@@ -30,7 +30,7 @@ class CustomTextFormField extends StatelessWidget {
       ),
       child: TextFormField(
         controller: textEditingController,
-        style: const TextStyle(color: FigmaColorsAuth.white),
+        style: const TextStyle(color: Color.fromARGB(255, 46, 20, 81)),
         onTap: () {
           isClickable ? null : FocusScope.of(context).requestFocus(FocusNode());
           onTap != null ? onTap!() : null;
@@ -39,13 +39,14 @@ class CustomTextFormField extends StatelessWidget {
         readOnly: !isClickable,
         keyboardType: keyboardType,
         decoration: InputDecoration(
-          errorStyle: TextStyle(color: FigmaColorsAuth.white.withOpacity(0.7)),
+          errorStyle:
+              TextStyle(color: FigmaColorsAuth.darknessFiolet.withOpacity(0.7)),
           enabledBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: FigmaColorsAuth.white),
+            borderSide: BorderSide(color: FigmaColorsAuth.darkFiolet),
           ),
           fillColor: FigmaColorsAuth.white,
           labelText: labelTextl,
-          labelStyle: const TextStyle(color: FigmaColorsAuth.white),
+          labelStyle: const TextStyle(color: FigmaColorsAuth.darkFiolet),
         ),
       ),
     );

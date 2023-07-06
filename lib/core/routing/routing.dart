@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rcp_new/Features/bil_screen/pages/full_image_screen.dart';
+import 'package:rcp_new/Features/show_bill/pages/show_bill_screen.dart';
 import 'package:rcp_new/core/data/bill_model.dart';
-
 import 'package:rcp_new/core/routing/auth_guard.dart';
 import 'package:rcp_new/main.dart';
-
 import '../../Features/auth_screens/presentation/pages/forget_pass_screen.dart';
 import '../../Features/auth_screens/presentation/pages/login_screen.dart';
 import '../../Features/auth_screens/presentation/pages/register_screen.dart';
@@ -50,6 +49,15 @@ class RouteConfig {
       },
     ),
     GoRoute(
+      path: '/bill-detail',
+      builder: (context, state) {
+        DocumentModel bill = state.extra as DocumentModel;
+        return ShowBillScreen(
+          documentModel: bill,
+        );
+      },
+    ),
+    GoRoute(
         path: '/bill',
         builder: (context, state) {
           return BillAddScreen(
@@ -63,9 +71,13 @@ class RouteConfig {
                 return const CtagorySelectScreen();
               }),
           GoRoute(
+              name: 'image',
               path: 'image',
               builder: (context, state) {
-                return FullImageScreen(imagePath: state.extra as String);
+                return FullImageScreen(
+                  id: state.queryParameters['id'],
+                  imagePath: state.queryParameters['image'] ?? '',
+                );
               }),
         ]),
   ], redirect: (context, state) => _redirect(context, state));
