@@ -2,9 +2,11 @@ part of 'documets_screen_cubit.dart';
 
 class DocumetsScreenState extends Equatable {
   const DocumetsScreenState(
-      {required this.dropdownMenuSelect,
-      required this.documents,
-      required this.allDocuments,
+      {required this.sort,
+      required this.querySort,
+      required this.isAscending,
+      required this.withOutGwarancy,
+      required this.withGwarancy,
       required this.pageSelectc,
       required this.bills,
       required this.isLoading,
@@ -13,47 +15,78 @@ class DocumetsScreenState extends Equatable {
   final bool isLoading;
   final bool isEndOfList;
   final PageSelect pageSelectc;
-  final List<DocumentModel> documents;
-  final List<DocumentModel> allDocuments;
-  final String dropdownMenuSelect;
+  final List<DocumentModel> withOutGwarancy;
+  final List<DocumentModel> withGwarancy;
+  final SortEnum sort;
+  final String querySort;
+  final bool isAscending;
 
   factory DocumetsScreenState.initail() {
-    return DocumetsScreenState(
-      documents: const [],
-      allDocuments: const [],
-      bills: const [],
+    return const DocumetsScreenState(
+      withOutGwarancy: [],
+      withGwarancy: [],
+      bills: [],
       isLoading: false,
       isEndOfList: false,
       pageSelectc: PageSelect.all,
-      dropdownMenuSelect: dropDownList.first,
+      sort: SortEnum.dateAddUp,
+      querySort: 'dateCreated',
+      isAscending: true,
     );
   }
+  factory DocumetsScreenState.reloadList({
+    required String querySort,
+    required bool isAscending,
+    required SortEnum sort,
+    required PageSelect pageSelectc,
+  }) {
+    return DocumetsScreenState(
+      withOutGwarancy: const [],
+      withGwarancy: const [],
+      bills: const [],
+      isLoading: true,
+      isEndOfList: false,
+      pageSelectc: pageSelectc,
+      sort: sort,
+      querySort: querySort,
+      isAscending: isAscending,
+    );
+  }
+
   DocumetsScreenState copyWith(
       {bills,
+      querySort,
+      isAscending,
+      withGwarancy,
+      sort,
       isLoading,
       isEndOfList,
       pageSelectc,
-      documents,
-      allDocuments,
+      withOutGwarancy,
       dropdownMenuSelect}) {
     return DocumetsScreenState(
-        documents: documents ?? this.documents,
-        allDocuments: allDocuments ?? this.allDocuments,
-        pageSelectc: pageSelectc ?? this.pageSelectc,
-        bills: bills ?? this.bills,
-        isLoading: isLoading ?? this.isLoading,
-        isEndOfList: isEndOfList ?? this.isEndOfList,
-        dropdownMenuSelect: dropdownMenuSelect ?? this.dropdownMenuSelect);
+      querySort: querySort ?? this.querySort,
+      isAscending: isAscending ?? this.isAscending,
+      withOutGwarancy: withOutGwarancy ?? this.withOutGwarancy,
+      withGwarancy: withGwarancy ?? this.withGwarancy,
+      pageSelectc: pageSelectc ?? this.pageSelectc,
+      bills: bills ?? this.bills,
+      isLoading: isLoading ?? this.isLoading,
+      isEndOfList: isEndOfList ?? this.isEndOfList,
+      sort: sort ?? this.sort,
+    );
   }
 
   @override
   List<Object> get props => [
+        querySort,
+        isAscending,
+        sort,
         bills,
         isLoading,
         isEndOfList,
         pageSelectc,
-        documents,
-        allDocuments,
-        dropdownMenuSelect
+        withOutGwarancy,
+        withGwarancy,
       ];
 }

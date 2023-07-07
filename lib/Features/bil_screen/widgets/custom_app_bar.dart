@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -8,9 +10,11 @@ class CustomAppBar extends StatelessWidget {
   const CustomAppBar({
     super.key,
     required String? imagePath,
+    required this.id,
   }) : _imagePath = imagePath;
 
   final String? _imagePath;
+  final String? id;
 
   @override
   Widget build(BuildContext context) {
@@ -45,13 +49,18 @@ class CustomAppBar extends StatelessWidget {
       elevation: 20,
       pinned: true,
       flexibleSpace: FlexibleSpaceBar(
-        background: CachedNetworkImage(
-          fit: BoxFit.cover,
-          imageUrl: _imagePath!,
-          progressIndicatorBuilder: (context, url, downloadProgress) =>
-              LinearProgressIndicator(value: downloadProgress.progress),
-          errorWidget: (context, url, error) => const Icon(Icons.error),
-        ),
+        background: id == null || id == ''
+            ? Image.file(
+                File(_imagePath!),
+                fit: BoxFit.cover,
+              )
+            : CachedNetworkImage(
+                fit: BoxFit.cover,
+                imageUrl: _imagePath!,
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    LinearProgressIndicator(value: downloadProgress.progress),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+              ),
       ),
       expandedHeight: 200,
       backgroundColor: FigmaColorsAuth.darkFiolet,

@@ -6,7 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../../../core/data/bill_model.dart';
 
 abstract class BillGetRepo {
-  Future<List<DocumentModel>> getBills({String sortQuery = 'dateCreated'});
+  Future<List<DocumentModel>> getBills(String sortQuery, bool descending);
   Future<void> deleteBill({required String billId});
   void refreshDocument();
 }
@@ -19,7 +19,7 @@ class BillGetRepoImpl implements BillGetRepo {
   DocumentSnapshot? _lastVisible;
   @override
   Future<List<DocumentModel>> getBills(
-      {String sortQuery = 'dateCreated'}) async {
+      String sortQuery, bool descending) async {
     List<DocumentModel> bills = [];
     Query<Map<String, dynamic>>? showPage;
     try {
@@ -27,7 +27,7 @@ class BillGetRepoImpl implements BillGetRepo {
       showPage = firebaseFirestore
           .collection('bills')
           .where('id', isEqualTo: userId)
-          .orderBy(sortQuery, descending: true)
+          .orderBy(sortQuery, descending: descending)
           .limit(10);
       if (_lastVisible != null) {
         showPage = showPage.startAfterDocument(_lastVisible!);

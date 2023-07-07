@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/theme.dart';
+import '../../../core/theme/theme.dart';
 
 class PurpleDescryptionField extends StatelessWidget {
   const PurpleDescryptionField({

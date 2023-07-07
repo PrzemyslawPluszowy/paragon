@@ -136,7 +136,10 @@ class _BillAddScreenState extends State<BillAddScreen> {
                   end: Alignment.bottomRight,
                 )),
                 child: CustomScrollView(slivers: [
-                  CustomAppBar(imagePath: _imagePath),
+                  CustomAppBar(
+                    imagePath: _imagePath,
+                    id: _id,
+                  ),
                   MenuAppBarWidget(
                       imagePath: _imagePath,
                       formKey: _formKey,

@@ -94,37 +94,54 @@ class ListPage extends StatelessWidget {
                             ? FigmaColorsAuth.darkFiolet
                             : FigmaColorsAuth.darkFiolet.withOpacity(0.7),
                         width: 70,
-                        child: Center(
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  '${documents[index].guaranteeDate!.toMonthhNumber().round()}',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .copyWith(color: FigmaColorsAuth.white),
-                                ),
-                                Text(
-                                  overflow: TextOverflow.ellipsis,
-                                  'miesięcy',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall!
-                                      .copyWith(color: FigmaColorsAuth.white),
-                                  softWrap: true,
-                                ),
-                                Text(
-                                  overflow: TextOverflow.ellipsis,
-                                  'gwarancji',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall!
-                                      .copyWith(color: FigmaColorsAuth.white),
-                                  softWrap: true,
-                                ),
-                              ]),
-                        ),
+                        child: documents[index].guaranteeDate != null
+                            ? Center(
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                    Text(
+                                      '${documents[index].guaranteeDate!.toMonthhNumber().round()}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge!
+                                          .copyWith(
+                                              color: FigmaColorsAuth.white),
+                                    ),
+                                    Text(
+                                      overflow: TextOverflow.ellipsis,
+                                      'miesięcy',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall!
+                                          .copyWith(
+                                              color: FigmaColorsAuth.white),
+                                      softWrap: true,
+                                    ),
+                                    Text(
+                                      overflow: TextOverflow.ellipsis,
+                                      'gwarancji',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall!
+                                          .copyWith(
+                                              color: FigmaColorsAuth.white),
+                                      softWrap: true,
+                                    ),
+                                  ]))
+                            : Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                    Text(
+                                      overflow: TextOverflow.ellipsis,
+                                      'brak',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall!
+                                          .copyWith(
+                                              color: FigmaColorsAuth.white),
+                                      softWrap: true,
+                                    ),
+                                  ]),
                       ),
                       Expanded(
                         child: ListTile(
@@ -136,33 +153,6 @@ class ListPage extends StatelessWidget {
                           tileColor: index.isEven
                               ? Colors.grey[700]
                               : Colors.grey[400],
-                          // leading: documents[index].guaranteeDate != null
-                          //     ? CircleAvatar(
-                          //         backgroundColor:
-                          //             const Color.fromARGB(255, 185, 129, 219),
-                          //         radius: 30,
-                          //         child: Column(
-                          //           mainAxisAlignment: MainAxisAlignment.center,
-                          //           crossAxisAlignment: CrossAxisAlignment.center,
-                          //           children: [
-                          //             Text(
-                          //               '${documents[index].guaranteeDate!.toMonthhNumber().round()}',
-                          //               style: const TextStyle(
-                          //                   color: FigmaColorsAuth.darknessFiolet),
-                          //             ),
-                          //             Text(
-                          //               overflow: TextOverflow.ellipsis,
-                          //               'miesięcy',
-                          //               style: Theme.of(context).textTheme.bodySmall,
-                          //               softWrap: true,
-                          //             )
-                          //           ],
-                          //         ))
-                          //     : const CircleAvatar(
-                          //         radius: 30,
-                          //         child: Icon(Icons.description,
-                          //             color: FigmaColorsAuth.darkFiolet),
-                          //       ),
                           title: RichText(
                             text: TextSpan(
                                 text: 'Nazwa: ',
@@ -212,15 +202,15 @@ class ListPage extends StatelessWidget {
                               ),
                               RichText(
                                 text: TextSpan(
-                                    text: documents[index].guaranteeDate !=
-                                                null &&
-                                            documents[index]
+                                    text: documents[index].guaranteeDate == null
+                                        ? 'Brak gwarancji'
+                                        : documents[index]
                                                     .guaranteeDate!
                                                     .millisecondsSinceEpoch >
                                                 DateTime.now()
                                                     .millisecondsSinceEpoch
-                                        ? 'Koniec gwarancji: '
-                                        : 'Brak gwarancji',
+                                            ? 'Koniec gwarancji: '
+                                            : 'Zakończono gwarancję: ${documents[index].guaranteeDate!.dateToStringFromTimestep()} ',
                                     style: const TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.w400,
@@ -236,11 +226,10 @@ class ListPage extends StatelessWidget {
                                                         .millisecondsSinceEpoch
                                             ? DateFormat('dd-MM-yyyy').format(
                                                 DateTime.fromMillisecondsSinceEpoch(
-                                                    state
-                                                        .bills[index]
+                                                    documents[index]
                                                         .guaranteeDate!
                                                         .millisecondsSinceEpoch))
-                                            : '',
+                                            : '  ',
                                         style: const TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold,

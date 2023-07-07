@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:rcp_new/Features/show_bill/pages/widgets/button_menu_widget.dart';
+import 'package:rcp_new/Features/show_bill/widgets/button_menu_widget.dart';
 
 import 'package:rcp_new/core/data/bill_model.dart';
 import 'package:rcp_new/core/utils/extension.dart';
 import '../../../../core/theme/theme.dart';
-import 'widgets/purple_descryption_field.dart';
-import 'widgets/sliver_app_bar.dart';
+import '../widgets/purple_descryption_field.dart';
+import '../widgets/sliver_app_bar.dart';
 
 class ShowBillScreen extends StatelessWidget {
   const ShowBillScreen({super.key, required this.documentModel});
@@ -30,8 +30,10 @@ class ShowBillScreen extends StatelessWidget {
           child: CustomScrollView(
             slivers: [
               billAppBar(context, documentModel),
-              const SliverToBoxAdapter(
-                child: ButtonMenuWidget(),
+              SliverToBoxAdapter(
+                child: ButtonMenuWidget(
+                  documentModel: documentModel,
+                ),
               ),
               const SliverToBoxAdapter(
                 child: SizedBox(
