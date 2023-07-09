@@ -59,7 +59,6 @@ class BillRepoImpl implements BillRepo {
       );
     }
   }
-  //TODO: add try catch
 
   @override
   Future<String> saveBilImage(

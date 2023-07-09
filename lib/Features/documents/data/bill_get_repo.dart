@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -8,13 +9,16 @@ import '../../../core/data/bill_model.dart';
 abstract class BillGetRepo {
   Future<List<DocumentModel>> getBills(String sortQuery, bool descending);
   Future<void> deleteBill({required String billId});
+  Future<void> deleteImage({required String billid});
   void refreshDocument();
 }
 
 class BillGetRepoImpl implements BillGetRepo {
   final FirebaseFirestore firebaseFirestore;
+  final FirebaseStorage firebaseStorage;
 
-  BillGetRepoImpl({required this.firebaseFirestore});
+  BillGetRepoImpl(
+      {required this.firebaseStorage, required this.firebaseFirestore});
 
   DocumentSnapshot? _lastVisible;
   @override
@@ -58,6 +62,7 @@ class BillGetRepoImpl implements BillGetRepo {
   Future<void> deleteBill({required String billId}) async {
     try {
       await firebaseFirestore.collection('bills').doc(billId).delete();
+      await deleteBill(billId: billId);
     } catch (e) {
       Fluttertoast.showToast(
         msg: e.toString(),
@@ -73,5 +78,22 @@ class BillGetRepoImpl implements BillGetRepo {
   @override
   void refreshDocument() {
     _lastVisible = null;
+  }
+
+  @override
+  Future<void> deleteImage({required String billid}) async {
+    try {
+      final ref = firebaseStorage.ref().child('bills').child(billid);
+      await ref.delete();
+    } on FirebaseException catch (e) {
+      Fluttertoast.showToast(
+        msg: e.code,
+        toastLength: Toast.LENGTH_LONG,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+        timeInSecForIosWeb: 10,
+      );
+    }
   }
 }

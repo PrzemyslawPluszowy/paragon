@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:rcp_new/Features/bil_screen/cubit/bill_cubit.dart';
 import 'package:rcp_new/Features/category_select/cubit/category_select_cubit.dart';
 import 'package:rcp_new/Features/documents/cubit/documets_screen_cubit.dart';
+import 'package:rcp_new/Features/setting/cubit/setting_cubit.dart';
 
 import 'package:rcp_new/core/injection/injection.dart';
 import 'package:rcp_new/firebase_options.dart';
@@ -16,6 +17,7 @@ import 'Features/main_screen/cubit/mainscreen_cubit.dart';
 import 'Features/main_screen/pages/main_screen.dart';
 import 'core/routing/routing.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -53,10 +55,14 @@ class MyApp extends StatelessWidget {
         BlocProvider(
             create: (context) =>
                 DocumetsScreenCubit(billGetRepo: getIt.call())..loadBills()),
+        BlocProvider(
+            create: (context) => SettingCubit(
+                authRepository: getIt.call(), settingRepo: getIt.call())),
       ],
       child: MaterialApp.router(
         title: 'RecipeScaner',
         theme: ThemeData(
+          fontFamily: GoogleFonts.lato().fontFamily,
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),

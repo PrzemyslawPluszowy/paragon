@@ -3,7 +3,7 @@ import 'auth_data_source.dart';
 abstract class AuthRepository {
   Future<String> createUserWithEmail(
       String email, String password, String name);
-
+  Future<void> deleteAccount();
   Future<String> signInWithEmailAndPassword(String email, String password);
 
   Future<void> signOut();
@@ -11,6 +11,7 @@ abstract class AuthRepository {
   Future loginWithGoogle();
   Future singInWithFacebook();
   Future<String> forgotPassword(String email);
+  Future<String?> getCurrentUserEmail();
 }
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -49,5 +50,15 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future singInWithFacebook() {
     return authDataSource.singInWithFacebook();
+  }
+
+  @override
+  Future<void> deleteAccount() async {
+    return await authDataSource.deleteAccount();
+  }
+
+  @override
+  Future<String?> getCurrentUserEmail() {
+    return authDataSource.getCurrentUserEmail();
   }
 }

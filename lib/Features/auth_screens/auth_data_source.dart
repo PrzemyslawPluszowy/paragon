@@ -19,6 +19,8 @@ abstract class AuthDataSource {
   Future loginWithGoogle();
   Future singInWithFacebook();
   Future<String> forgotPassword(String email);
+  Future<void> deleteAccount();
+  Future<String?> getCurrentUserEmail();
 }
 
 class AuthDataSourceImpl implements AuthDataSource {
@@ -166,5 +168,34 @@ class AuthDataSourceImpl implements AuthDataSource {
       res = AuthExceptionsHandler().firebaseExceptions(err);
     }
     return res;
+  }
+
+  @override
+  Future<void> deleteAccount() async {
+    try {
+      return await firebaseAuth.currentUser!.delete();
+    } on FirebaseException catch (e) {
+      Fluttertoast.showToast(msg: e.code);
+    } catch (e) {
+      Fluttertoast.showToast(msg: e.toString());
+    }
+  }
+
+  @override
+  Future<String?> getCurrentUserEmail() async {
+    String? userEmail;
+    try {
+      if (firebaseAuth.currentUser != null) {
+        userEmail = firebaseAuth.currentUser!.email;
+      } else {
+        userEmail = null;
+      }
+    } catch (e) {
+      Fluttertoast.showToast(
+          msg: e.toString(),
+          backgroundColor: FigmaColorsAuth.lightFiolet,
+          textColor: FigmaColorsAuth.white);
+    }
+    return userEmail;
   }
 }

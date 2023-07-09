@@ -83,7 +83,7 @@ class DocumetsScreenCubit extends Cubit<DocumetsScreenState> {
         sort: state.sort,
         pageSelectc: state.pageSelectc));
     billGetRepo.refreshDocument();
-    await loadBills();
+    emit(state.copyWith(isLoading: false));
   }
 
   refreshDocument() async {

@@ -22,13 +22,13 @@ class AuthLogo extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Text('Mr. Recipe',
+                Text('Paragony Gwarancyjne',
                     style: Theme.of(context)
                         .copyWith(
                             textTheme: const TextTheme(
                           bodyLarge: TextStyle(
                               color: Colors.white,
-                              fontSize: 40,
+                              fontSize: 20,
                               fontWeight: FontWeight.w500),
                         ))
                         .textTheme
@@ -37,7 +37,7 @@ class AuthLogo extends StatelessWidget {
                   angle: 0.19,
                   child: Icon(
                     Icons.calculate_outlined,
-                    color: FigmaColorsAuth.black.withOpacity(0.6),
+                    color: FigmaColorsAuth.white.withOpacity(0.6),
                     size: 45,
                   ),
                 )

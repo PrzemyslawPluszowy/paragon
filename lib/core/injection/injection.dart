@@ -11,6 +11,8 @@ import '../../Features/auth_screens/repository.dart';
 import '../../Features/choise_mode_screen/camera_controller.dart';
 import '../../Features/choise_mode_screen/ocr_controller.dart';
 import '../../Features/documents/data/bill_get_repo.dart';
+import '../../Features/setting/cubit/setting_cubit.dart';
+import '../../Features/setting/setting_repo.dart';
 
 final getIt = GetIt.instance;
 
@@ -23,9 +25,18 @@ initDi() async {
 //Auth Repository
   getIt.registerLazySingleton<AuthRepository>(
       () => AuthRepositoryImpl(authDataSource: getIt.call()));
+  //SettingCubit
+  getIt.registerFactory<SettingCubit>(() =>
+      SettingCubit(authRepository: getIt.call(), settingRepo: getIt.call()));
   //Auth Data Source
   getIt.registerLazySingleton<AuthDataSource>(() => AuthDataSourceImpl(
       firebaseAuth: getIt.call(), firebaseFirestore: getIt.call()));
+
+//setting repo
+  getIt.registerLazySingleton<SettingRepo>(() => SettingRepoImpl(
+      firebaseFirestore: getIt.call(),
+      firebaseAuth: getIt.call(),
+      firebaseStorage: getIt.call()));
 
 //camera controller repository
   getIt.registerLazySingleton<CameraController>(
@@ -37,8 +48,8 @@ initDi() async {
       firebaseFirestore: getIt.call(), firebaseStorage: getIt.call()));
 
   // bii get repo
-  getIt.registerLazySingleton<BillGetRepo>(
-      () => BillGetRepoImpl(firebaseFirestore: getIt.call()));
+  getIt.registerLazySingleton<BillGetRepo>(() => BillGetRepoImpl(
+      firebaseFirestore: getIt.call(), firebaseStorage: getIt.call()));
 //Firebase
   getIt.registerLazySingleton<FirebaseStorage>(() => FirebaseStorage.instance);
   getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);

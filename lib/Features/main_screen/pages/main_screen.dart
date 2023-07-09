@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rcp_new/Features/documents/pages/documents_screen.dart';
+import 'package:rcp_new/Features/setting/pages/setting_screen.dart';
 import 'package:rcp_new/shared/global_widget/responsive_widget.dart';
 
 import '../../choise_mode_screen/pages/choice_mode_screen.dart';
@@ -9,9 +10,7 @@ import '../cubit/mainscreen_cubit.dart';
 List<Widget> _widgetOptions = <Widget>[
   const AddRecipeScreen(),
   const DocumentsScreen(),
-  const Text(
-    'Index 2: Settings',
-  ),
+  const SettingScreen(),
 ];
 
 class MainScreen extends StatelessWidget {

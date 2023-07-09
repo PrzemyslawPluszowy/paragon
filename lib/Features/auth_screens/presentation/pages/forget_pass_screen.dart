@@ -54,7 +54,7 @@ class ForgetPhoneScreen extends StatelessWidget {
                     children: [
                       AuthLogo(width: width),
                       const Spacer(),
-                      Text('Write yor email',
+                      Text('Wprowadź adres email',
                           style: Theme.of(context)
                               .copyWith(
                                   textTheme: const TextTheme(
@@ -86,7 +86,9 @@ class ForgetPhoneScreen extends StatelessWidget {
                       CustomSendButton(
                           isLoading: state.isSending,
                           width: width,
-                          label: state.isSent ? 'Back to login' : 'Send email',
+                          label: state.isSent
+                              ? 'Powrót do logowania'
+                              : 'Wyslij email',
                           onPressed: state.isSent
                               ? () {
                                   context.go('/login');
@@ -105,7 +107,7 @@ class ForgetPhoneScreen extends StatelessWidget {
                           context.go('/login');
                         },
                         child: const CustomRichText(
-                            label: "Back to login?", boldText: 'Click'),
+                            label: "Wróc do logowania", boldText: 'Click'),
                       ),
                       const Spacer(
                         flex: 1,

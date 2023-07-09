@@ -55,7 +55,7 @@ class LoginPhoneScreen extends StatelessWidget {
                     children: [
                       AuthLogo(width: width),
                       const Spacer(),
-                      Text('Login',
+                      Text('Zaloguj się',
                           style: Theme.of(context)
                               .copyWith(
                                   textTheme: const TextTheme(
@@ -106,7 +106,7 @@ class LoginPhoneScreen extends StatelessWidget {
                       ),
                       CustomSendButton(
                         width: width,
-                        label: 'Login',
+                        label: 'Zaloguj',
                         onPressed: () {
                           context.read<LoginCubit>().subbmitForm();
                         },
@@ -121,7 +121,8 @@ class LoginPhoneScreen extends StatelessWidget {
                               context.go('/forgot-pass');
                             },
                             child: const CustomRichText(
-                                label: "Forget password?", boldText: ' Click'),
+                                label: "Zapomniałes hasła?",
+                                boldText: ' Click'),
                           ),
                         ),
                       ),
@@ -151,8 +152,8 @@ class LoginPhoneScreen extends StatelessWidget {
                           context.go('/register');
                         },
                         child: const CustomRichText(
-                            label: "You don't have account",
-                            boldText: 'Create'),
+                            label: "Nie masz konta?",
+                            boldText: ' Zarejestruj się'),
                       ),
                       const Spacer(
                         flex: 2,

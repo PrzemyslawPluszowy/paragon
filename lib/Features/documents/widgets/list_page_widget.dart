@@ -279,19 +279,13 @@ class ListPage extends StatelessWidget {
                               child: const Text('Nie'),
                             ),
                             TextButton(
-                              onPressed: () async {
-                                await context
+                              onPressed: () {
+                                context
                                     .read<DocumetsScreenCubit>()
                                     .deleteDocument(
                                         id: documents[index].billId!);
-                                if (context.mounted) {
-                                  await context
-                                      .read<DocumetsScreenCubit>()
-                                      .refreshDocument();
-                                }
 
-                                if (context.mounted &&
-                                    state.isLoading == false) {
+                                if (!state.isLoading) {
                                   context.pop();
                                 }
                               },

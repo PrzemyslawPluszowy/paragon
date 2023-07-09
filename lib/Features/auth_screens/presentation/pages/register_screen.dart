@@ -54,7 +54,7 @@ class LoginPhoneScreen extends StatelessWidget {
                   if (state.isSucces) {
                     GoRouter.of(context).go('/');
                     Fluttertoast.showToast(
-                        msg: "Register succes",
+                        msg: "Konto zostało utworzone",
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.BOTTOM,
                         timeInSecForIosWeb: 1,
@@ -68,7 +68,7 @@ class LoginPhoneScreen extends StatelessWidget {
                     children: [
                       AuthLogo(width: width),
                       const Spacer(),
-                      Text('Register',
+                      Text('Zarejestruj się',
                           style: Theme.of(context)
                               .copyWith(
                                   textTheme: const TextTheme(
@@ -84,7 +84,7 @@ class LoginPhoneScreen extends StatelessWidget {
                       CustomFormField(
                         isError: state.nameError,
                         width: width,
-                        label: 'Name',
+                        label: 'Imię',
                         insideIcon: Icons.person,
                         onChanged: (value) {
                           context.read<RegisterCubit>().nameChanged(value);
@@ -140,7 +140,7 @@ class LoginPhoneScreen extends StatelessWidget {
                       CustomSendButton(
                         isLoading: state.isSending,
                         width: width,
-                        label: 'Make an account',
+                        label: 'Utwórz konto',
                         onPressed: () {
                           context.read<RegisterCubit>().subbmitForm();
                         },
@@ -157,8 +157,7 @@ class LoginPhoneScreen extends StatelessWidget {
                           context.go('/');
                         },
                         child: const CustomRichText(
-                            label: 'Already have an account? ',
-                            boldText: 'Login'),
+                            label: 'Masz już konto?', boldText: 'Zaloguj się'),
                       ),
                       const Spacer(
                         flex: 2,
