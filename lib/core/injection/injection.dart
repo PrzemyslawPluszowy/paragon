@@ -12,7 +12,8 @@ import '../../Features/choise_mode_screen/camera_controller.dart';
 import '../../Features/choise_mode_screen/ocr_controller.dart';
 import '../../Features/documents/data/bill_get_repo.dart';
 import '../../Features/setting/cubit/setting_cubit.dart';
-import '../../Features/setting/setting_repo.dart';
+import '../../Features/setting/data/pdf_controller.dart';
+import '../../Features/setting/data/setting_repo.dart';
 
 final getIt = GetIt.instance;
 
@@ -26,8 +27,11 @@ initDi() async {
   getIt.registerLazySingleton<AuthRepository>(
       () => AuthRepositoryImpl(authDataSource: getIt.call()));
   //SettingCubit
-  getIt.registerFactory<SettingCubit>(() =>
-      SettingCubit(authRepository: getIt.call(), settingRepo: getIt.call()));
+  getIt.registerFactory<SettingCubit>(() => SettingCubit(
+      authRepository: getIt.call(),
+      settingRepo: getIt.call(),
+      pdfController: getIt.call(),
+      billGetRepo: getIt.call()));
   //Auth Data Source
   getIt.registerLazySingleton<AuthDataSource>(() => AuthDataSourceImpl(
       firebaseAuth: getIt.call(), firebaseFirestore: getIt.call()));
@@ -46,7 +50,8 @@ initDi() async {
   // bill savwe repo
   getIt.registerLazySingleton<BillRepo>(() => BillRepoImpl(
       firebaseFirestore: getIt.call(), firebaseStorage: getIt.call()));
-
+//pdf controller
+  getIt.registerLazySingleton<PdfController>(() => PdfControllerImpl());
   // bii get repo
   getIt.registerLazySingleton<BillGetRepo>(() => BillGetRepoImpl(
       firebaseFirestore: getIt.call(), firebaseStorage: getIt.call()));

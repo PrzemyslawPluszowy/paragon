@@ -67,6 +67,9 @@ dependencies:
   google_mlkit_text_recognition: ^0.7.0
   jiffy: ^6.2.1
   animated_toggle_switch: ^0.7.0
+  pdf: ^3.10.4
+  printing: ^5.11.0
+  flutter_file_dialog: ^3.0.1
 
 dev_dependencies:
   flutter_test:

@@ -72,10 +72,13 @@ class _BillAddScreenState extends State<BillAddScreen> {
     _imagePath = widget.bill.imagePath;
     _name = widget.bill.name ?? '';
 
-    _nameController = TextEditingController(text: widget.bill.name);
+    _nameController = TextEditingController();
     _nameController.addListener(() {
-      _name = _nameController.text;
+      setState(() {
+        _name = _nameController.text;
+      });
     });
+
     _priceController = TextEditingController(text: _price.toString());
 
     _priceController.addListener(() {
@@ -169,11 +172,8 @@ class _BillAddScreenState extends State<BillAddScreen> {
                               }
                               return null;
                             },
-                            keyboardType: TextInputType.name,
+                            keyboardType: TextInputType.text,
                             labelTextl: 'Nazwa',
-                            onChanged: (value) {
-                              _name = value ?? '';
-                            },
                           ),
                           Row(
                             mainAxisSize: MainAxisSize.min,

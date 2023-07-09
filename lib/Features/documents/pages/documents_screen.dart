@@ -56,7 +56,7 @@ class _DocumentsScreenState extends State<DocumentsScreen> {
           transform: GradientRotation(0),
           colors: [
             Color(0xffdaedfd),
-            Color.fromARGB(174, 231, 183, 239),
+            Color.fromARGB(255, 227, 197, 233),
             Color(0xffdaedfd),
             Colors.white,
           ],

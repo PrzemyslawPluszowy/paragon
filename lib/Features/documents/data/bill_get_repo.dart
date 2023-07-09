@@ -10,6 +10,7 @@ abstract class BillGetRepo {
   Future<List<DocumentModel>> getBills(String sortQuery, bool descending);
   Future<void> deleteBill({required String billId});
   Future<void> deleteImage({required String billid});
+  Future<List<DocumentModel>> getAlldocuments();
   void refreshDocument();
 }
 
@@ -62,7 +63,7 @@ class BillGetRepoImpl implements BillGetRepo {
   Future<void> deleteBill({required String billId}) async {
     try {
       await firebaseFirestore.collection('bills').doc(billId).delete();
-      await deleteBill(billId: billId);
+      await deleteImage(billid: billId);
     } catch (e) {
       Fluttertoast.showToast(
         msg: e.toString(),
@@ -83,7 +84,7 @@ class BillGetRepoImpl implements BillGetRepo {
   @override
   Future<void> deleteImage({required String billid}) async {
     try {
-      final ref = firebaseStorage.ref().child('bills').child(billid);
+      final ref = firebaseStorage.ref().child('bills').child('$billid.jpg');
       await ref.delete();
     } on FirebaseException catch (e) {
       Fluttertoast.showToast(
@@ -94,6 +95,21 @@ class BillGetRepoImpl implements BillGetRepo {
         fontSize: 16.0,
         timeInSecForIosWeb: 10,
       );
+    }
+  }
+
+  @override
+  Future<List<DocumentModel>> getAlldocuments() async {
+    try {
+      final userId = FirebaseAuth.instance.currentUser!.uid;
+      final ref = firebaseFirestore
+          .collection('bills')
+          .where('id', isEqualTo: userId)
+          .orderBy('dateCreated', descending: true);
+      final snapshot = await ref.get();
+      return snapshot.docs.map((e) => DocumentModel.fromSnapshot(e)).toList();
+    } catch (e) {
+      rethrow;
     }
   }
 }

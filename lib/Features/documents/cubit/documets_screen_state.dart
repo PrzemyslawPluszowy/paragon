@@ -2,7 +2,8 @@ part of 'documets_screen_cubit.dart';
 
 class DocumetsScreenState extends Equatable {
   const DocumetsScreenState(
-      {required this.sort,
+      {required this.loadingMoreData,
+      required this.sort,
       required this.querySort,
       required this.isAscending,
       required this.withOutGwarancy,
@@ -13,6 +14,7 @@ class DocumetsScreenState extends Equatable {
       required this.isEndOfList});
   final List<DocumentModel> bills;
   final bool isLoading;
+  final bool loadingMoreData;
   final bool isEndOfList;
   final PageSelect pageSelectc;
   final List<DocumentModel> withOutGwarancy;
@@ -23,6 +25,7 @@ class DocumetsScreenState extends Equatable {
 
   factory DocumetsScreenState.initail() {
     return const DocumetsScreenState(
+      loadingMoreData: false,
       withOutGwarancy: [],
       withGwarancy: [],
       bills: [],
@@ -41,16 +44,16 @@ class DocumetsScreenState extends Equatable {
     required PageSelect pageSelectc,
   }) {
     return DocumetsScreenState(
-      withOutGwarancy: const [],
-      withGwarancy: const [],
-      bills: const [],
-      isLoading: true,
-      isEndOfList: false,
-      pageSelectc: pageSelectc,
-      sort: sort,
-      querySort: querySort,
-      isAscending: isAscending,
-    );
+        withOutGwarancy: const [],
+        withGwarancy: const [],
+        bills: const [],
+        isLoading: true,
+        isEndOfList: false,
+        pageSelectc: pageSelectc,
+        sort: sort,
+        querySort: querySort,
+        isAscending: isAscending,
+        loadingMoreData: false);
   }
 
   DocumetsScreenState copyWith(
@@ -63,7 +66,8 @@ class DocumetsScreenState extends Equatable {
       isEndOfList,
       pageSelectc,
       withOutGwarancy,
-      dropdownMenuSelect}) {
+      dropdownMenuSelect,
+      loadingMoreData}) {
     return DocumetsScreenState(
       querySort: querySort ?? this.querySort,
       isAscending: isAscending ?? this.isAscending,
@@ -74,11 +78,13 @@ class DocumetsScreenState extends Equatable {
       isLoading: isLoading ?? this.isLoading,
       isEndOfList: isEndOfList ?? this.isEndOfList,
       sort: sort ?? this.sort,
+      loadingMoreData: loadingMoreData ?? this.loadingMoreData,
     );
   }
 
   @override
   List<Object> get props => [
+        loadingMoreData,
         querySort,
         isAscending,
         sort,

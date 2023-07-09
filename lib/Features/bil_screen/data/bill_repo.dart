@@ -66,8 +66,10 @@ class BillRepoImpl implements BillRepo {
     String url = '';
     try {
       final fileToUpload = File(path);
-      final ref = firebaseStorage.ref().child('bills').child(billId);
-      await ref.putFile(fileToUpload);
+      final ref = firebaseStorage.ref().child('bills').child('$billId.jpg');
+      await ref.putFile(
+        fileToUpload,
+      );
       url = await ref.getDownloadURL();
     } on FirebaseException catch (e) {
       Fluttertoast.showToast(msg: e.message.toString());

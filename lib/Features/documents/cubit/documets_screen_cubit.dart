@@ -102,15 +102,18 @@ class DocumetsScreenCubit extends Cubit<DocumetsScreenState> {
     List<DocumentModel> withGwarancy = [];
     List<DocumentModel> withOutGwarancy = [];
 
-    emit(state.copyWith(isLoading: true));
+    emit(state.copyWith(loadingMoreData: true));
+    await Future.delayed(const Duration(milliseconds: 2000));
+
     final billsFetch = await billGetRepo.getBills(
       state.querySort,
       state.isAscending,
     );
     if (billsFetch.isEmpty) {
-      emit(state.copyWith(isEndOfList: true, isLoading: false));
+      emit(state.copyWith(
+          isEndOfList: true, isLoading: false, loadingMoreData: false));
+      return;
     }
-    await Future.delayed(const Duration(milliseconds: 500));
     bills = [...state.bills, ...billsFetch];
     withGwarancy = bills.where((element) {
       return element.guaranteeDate != null;
@@ -118,10 +121,12 @@ class DocumetsScreenCubit extends Cubit<DocumetsScreenState> {
 
     withOutGwarancy =
         bills.where((element) => element.guaranteeDate == null).toList();
+
     emit(state.copyWith(
         bills: bills,
         withGwarancy: withGwarancy,
         isLoading: false,
+        loadingMoreData: false,
         withOutGwarancy: withOutGwarancy));
   }
 }

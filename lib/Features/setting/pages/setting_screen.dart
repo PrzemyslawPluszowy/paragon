@@ -44,7 +44,9 @@ List<GridList> menu = [
       icon: Icons.delete_forever),
   //exportuj dane
   GridList(
-    onTap: () {},
+    onTap: (BuildContext context) async {
+      await context.read<SettingCubit>().createPdf();
+    },
     title: 'Eksportuj dane',
     icon: Icons.upload_file,
   ),

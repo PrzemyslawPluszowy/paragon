@@ -57,7 +57,10 @@ class MyApp extends StatelessWidget {
                 DocumetsScreenCubit(billGetRepo: getIt.call())..loadBills()),
         BlocProvider(
             create: (context) => SettingCubit(
-                authRepository: getIt.call(), settingRepo: getIt.call())),
+                authRepository: getIt.call(),
+                settingRepo: getIt.call(),
+                billGetRepo: getIt.call(),
+                pdfController: getIt.call())),
       ],
       child: MaterialApp.router(
         title: 'RecipeScaner',

@@ -45,7 +45,7 @@ class SettingRepoImpl implements SettingRepo {
   @override
   Future<void> deleteImage({required String billid}) async {
     try {
-      await firebaseStorage.ref().child('bills').child(billid).delete();
+      await firebaseStorage.ref().child('bills').child('$billid.jpg').delete();
     } catch (e) {
       Fluttertoast.showToast(
         msg: e.toString(),

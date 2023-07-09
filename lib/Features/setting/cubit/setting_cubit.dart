@@ -1,21 +1,33 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:rcp_new/Features/setting/setting_repo.dart';
+import 'package:rcp_new/Features/documents/data/bill_get_repo.dart';
+import 'package:rcp_new/Features/setting/data/pdf_controller.dart';
+import 'package:rcp_new/Features/setting/data/setting_repo.dart';
+import 'package:rcp_new/core/data/bill_model.dart';
 
 import '../../auth_screens/repository.dart';
 import '../../documents/cubit/documets_screen_cubit.dart';
+import '../models/pdfData.dart';
 
 part 'setting_state.dart';
 
 class SettingCubit extends Cubit<SettingState> {
-  SettingCubit({required this.settingRepo, required this.authRepository})
+  SettingCubit(
+      {required this.billGetRepo,
+      required this.pdfController,
+      required this.settingRepo,
+      required this.authRepository})
       : super(SettingState.initail());
 
   final AuthRepository authRepository;
   final SettingRepo settingRepo;
+  final PdfController pdfController;
+  final BillGetRepo billGetRepo;
 
   logOut() async {
     try {
@@ -60,7 +72,7 @@ class SettingCubit extends Cubit<SettingState> {
   changePass() async {
     try {
       emit(state.copyWith(isBusyl: true, status: 'Wysyłanie linku...'));
-      await Future.delayed(Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 500));
       final userEmail = await authRepository.getCurrentUserEmail();
       if (userEmail != null) {
         await authRepository.forgotPassword(userEmail);
@@ -71,6 +83,27 @@ class SettingCubit extends Cubit<SettingState> {
       }
     } on FirebaseAuthException catch (e) {
       Fluttertoast.showToast(msg: e.message.toString());
+    }
+  }
+
+  createPdf() async {
+    try {
+      emit(state.copyWith(isBusyl: true, status: 'ładuje dane'));
+      List<DocumentModel> dataFetched = await billGetRepo.getAlldocuments();
+      emit(state.copyWith(
+          isBusyl: true, status: 'generuje pdf, to mi chwile zajmie...'));
+
+      List<DocumetsToPdfModel> data =
+          await pdfController.getDocumentsToPdf(dataFetched);
+      final template = pdfController.pdfPageLayOut(data);
+      emit(state.copyWith(isBusyl: true, status: 'juz prawie  koniec'));
+
+      final pdf = pdfController.createPdf(data, template);
+      await pdfController.previewPDF(pdf);
+      emit(
+          state.copyWith(isBusyl: false, status: 'zakonczone generowanie pdf'));
+    } catch (e) {
+      emit(state.copyWith(isBusyl: false, status: e.toString()));
     }
   }
 }

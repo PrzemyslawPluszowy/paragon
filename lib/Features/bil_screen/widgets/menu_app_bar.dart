@@ -9,45 +9,33 @@ import '../../documents/cubit/documets_screen_cubit.dart';
 import '../cubit/bill_cubit.dart';
 
 class MenuAppBarWidget extends StatelessWidget {
-  const MenuAppBarWidget({
-    super.key,
-    required String? imagePath,
-    required GlobalKey<FormState> formKey,
-    required String? type,
-    required String category,
-    required String companyName,
-    required DateTime dateCreated,
-    required DateTime? guaranteeDate,
-    required List<String> listItems,
-    required String name,
-    required double price,
-    required String? userId,
-    required String? id,
-  })  : _imagePath = imagePath,
-        _formKey = formKey,
-        _type = type,
-        _category = category,
-        _companyName = companyName,
-        _dateCreated = dateCreated,
-        _guaranteeDate = guaranteeDate,
-        _listItems = listItems,
-        _name = name,
-        _price = price,
-        _userId = userId,
-        _id = id;
+  final String? imagePath;
+  final GlobalKey<FormState> formKey;
+  final String? type;
+  final String category;
+  final String companyName;
+  final DateTime dateCreated;
+  final DateTime? guaranteeDate;
+  final List<String> listItems;
+  final String name;
+  final double price;
+  final String? userId;
+  final String? id;
 
-  final String? _imagePath;
-  final GlobalKey<FormState> _formKey;
-  final String? _type;
-  final String _category;
-  final String _companyName;
-  final DateTime _dateCreated;
-  final DateTime? _guaranteeDate;
-  final List<String> _listItems;
-  final String _name;
-  final double _price;
-  final String? _userId;
-  final String? _id;
+  const MenuAppBarWidget(
+      {super.key,
+      this.imagePath,
+      required this.formKey,
+      this.type,
+      required this.category,
+      required this.companyName,
+      required this.dateCreated,
+      this.guaranteeDate,
+      required this.listItems,
+      required this.name,
+      required this.price,
+      this.userId,
+      this.id});
 
   @override
   Widget build(BuildContext context) {
@@ -71,8 +59,8 @@ class MenuAppBarWidget extends StatelessWidget {
                     IconButton(
                         onPressed: () {
                           context.pushNamed('image', queryParameters: {
-                            'image': _imagePath,
-                            'id': _id,
+                            'image': imagePath,
+                            'id': id,
                           });
                         },
                         icon: const Icon(
@@ -85,23 +73,24 @@ class MenuAppBarWidget extends StatelessWidget {
                     ),
                     IconButton(
                         onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
+                          if (formKey.currentState!.validate()) {
+                            print('$name ******************');
                             final newBill = DocumentModel(
-                              type: _type,
-                              category: _category,
-                              companyName: _companyName,
-                              dateCreated: Timestamp.fromDate(_dateCreated),
-                              guaranteeDate: _guaranteeDate == null
+                              type: type,
+                              category: category,
+                              companyName: companyName,
+                              dateCreated: Timestamp.fromDate(dateCreated),
+                              guaranteeDate: guaranteeDate == null
                                   ? null
-                                  : Timestamp.fromDate(_guaranteeDate!),
-                              imagePath: _imagePath,
-                              listItems: _listItems,
-                              name: _name,
-                              price: _price,
-                              userId: _userId,
-                              billId: _id,
+                                  : Timestamp.fromDate(guaranteeDate!),
+                              imagePath: imagePath,
+                              listItems: listItems,
+                              name: name,
+                              price: price,
+                              userId: userId,
+                              billId: id,
                             );
-                            if (_id != null && _id!.isNotEmpty) {
+                            if (id != null && id!.isNotEmpty) {
                               await context
                                   .read<BillCubit>()
                                   .updadateBill(bill: newBill);

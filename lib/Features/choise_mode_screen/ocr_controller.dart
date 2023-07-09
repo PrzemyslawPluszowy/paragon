@@ -143,10 +143,9 @@ class OcrControllerImpl implements OcrController {
     }
 
     preparedList.removeWhere((element) => element.length <= 4);
-    if (preparedList.length > 20) {
+    if (preparedList.length > 21) {
       preparedList = preparedList.sublist(0, 20);
     }
-    finalList = preparedList.sublist(0, 20);
     return finalList;
   }
 }
