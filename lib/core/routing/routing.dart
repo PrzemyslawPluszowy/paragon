@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:rcp_new/Features/bil_screen/pages/full_image_screen.dart';
 import 'package:rcp_new/Features/show_bill/pages/show_bill_screen.dart';
 import 'package:rcp_new/core/data/bill_model.dart';
 import 'package:rcp_new/core/routing/auth_guard.dart';
@@ -9,7 +8,8 @@ import '../../Features/auth_screens/presentation/pages/forget_pass_screen.dart';
 import '../../Features/auth_screens/presentation/pages/login_screen.dart';
 import '../../Features/auth_screens/presentation/pages/register_screen.dart';
 import '../../Features/auth_screens/repository.dart';
-import '../../Features/bil_screen/pages/bill_screen.dart';
+import '../../Features/bil_edit/pages/bill_screen.dart';
+import '../../Features/bil_edit/pages/full_image_screen.dart';
 import '../../Features/category_select/pages/category_select_screen.dart';
 import '../../Features/main_screen/pages/main_screen.dart';
 

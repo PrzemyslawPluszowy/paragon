@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:go_router/go_router.dart';
 import 'package:rcp_new/core/data/bill_model.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:rcp_new/core/utils/dialog_confirm.dart';
 import '../../../../core/theme/theme.dart';
 import '../cubit/homescreen_cubit.dart';
 
@@ -50,21 +49,73 @@ class AddRecipeScreen extends StatelessWidget {
                     elevation: 0.5,
                     pinned: true,
                     flexibleSpace: FlexibleSpaceBar(
-                      background: SvgPicture.asset('assets/appBar.svg',
-                          fit: BoxFit.cover),
+                      background: Image.asset(
+                        'assets/appBar2.png',
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                    title: Text('Simple Paragon',
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(color: Colors.white)),
+                    actions: [
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        alignment: Alignment.centerLeft,
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(colors: [
+                          FigmaColorsAuth.darkFiolet.withOpacity(0.9),
+                          FigmaColorsAuth.darkFiolet.withOpacity(0.5),
+                          FigmaColorsAuth.darkFiolet.withOpacity(0.1),
+                        ])),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 20.0),
+                          child: Text('Paragony Gwarancyjne',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge!
+                                  .copyWith(
+                                    color: FigmaColorsAuth.white,
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                        ),
+                      ),
+                    ],
+                    // title:
                     expandedHeight: 200,
                     backgroundColor: FigmaColorsAuth.darkFiolet,
                   ),
-                  state.isLoading
+                  state.isLoading || state.isBusyl
                       ? const SliverToBoxAdapter(
                           child: LinearProgressIndicator(),
                         )
+                      : const SliverToBoxAdapter(
+                          child: SizedBox(),
+                        ),
+                  state.status != ''
+                      ? SliverToBoxAdapter(
+                          child: Container(
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.black.withOpacity(0.5),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 3))
+                            ],
+                            color: FigmaColorsAuth.darkFiolet,
+                            border: Border.all(
+                                color: FigmaColorsAuth.darkFiolet, width: 2),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(state.status,
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineSmall!
+                                    .copyWith(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w400)),
+                          ),
+                        ))
                       : const SliverToBoxAdapter(
                           child: SizedBox(),
                         ),
@@ -82,7 +133,14 @@ class AddRecipeScreen extends StatelessWidget {
                           if (index == 0) {
                             context.read<AddRecipeCubit>().initCamera();
                           } else {
-                            Fluttertoast.showToast(msg: 'Wkrótce dostępne');
+                            DialogConfirm.confirmDialog(
+                                context: context,
+                                title: 'Exportuj do PDF',
+                                content:
+                                    'Eksportowanie danych może zająć chwilę,bądź cierpliwy.',
+                                onConfirm: () async => await context
+                                    .read<AddRecipeCubit>()
+                                    .createPdf());
                           }
                         },
                         child: Stack(

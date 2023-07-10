@@ -2,7 +2,9 @@ part of 'homescreen_cubit.dart';
 
 class AddRecipeState extends Equatable {
   const AddRecipeState(
-      {required this.listHelper,
+      {required this.isBusyl,
+      required this.status,
+      required this.listHelper,
       required this.categoryList,
       required this.isLoading,
       required this.listItems,
@@ -18,6 +20,8 @@ class AddRecipeState extends Equatable {
   final Timestamp date;
   final List<String> categoryList;
   final List<String> listHelper;
+  final bool isBusyl;
+  final String status;
 
   factory AddRecipeState.initail() {
     return AddRecipeState(
@@ -28,7 +32,9 @@ class AddRecipeState extends Equatable {
         date: Timestamp.now(),
         categoryList: const [],
         isLoading: false,
-        listHelper: const []);
+        listHelper: const [],
+        isBusyl: false,
+        status: '');
   }
   AddRecipeState copyWith(
       {List<String>? categoryList,
@@ -38,7 +44,9 @@ class AddRecipeState extends Equatable {
       List<String>? listItems,
       List<String>? listPrice,
       Timestamp? date,
-      List<String>? listHelper}) {
+      List<String>? listHelper,
+      bool? isBusyl,
+      String? status}) {
     return AddRecipeState(
         categoryList: categoryList ?? this.categoryList,
         isLoading: isLoading ?? this.isLoading,
@@ -47,7 +55,9 @@ class AddRecipeState extends Equatable {
         listItems: listItems ?? this.listItems,
         listPrice: listPrice ?? this.listPrice,
         date: date ?? this.date,
-        listHelper: listHelper ?? this.listHelper);
+        listHelper: listHelper ?? this.listHelper,
+        isBusyl: isBusyl ?? this.isBusyl,
+        status: status ?? this.status);
   }
 
   @override
@@ -59,6 +69,8 @@ class AddRecipeState extends Equatable {
         date,
         categoryList,
         isLoading,
-        listHelper
+        listHelper,
+        isBusyl,
+        status
       ];
 }

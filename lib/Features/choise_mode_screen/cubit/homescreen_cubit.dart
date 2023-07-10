@@ -5,17 +5,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:rcp_new/core/data/model/company_model.dart';
 
+import '../../../core/data/bill_model.dart';
+import '../../documents/data/bill_get_repo.dart';
+import '../../setting/data/pdf_controller.dart';
+import '../../setting/models/pdf_model.dart';
 import '../camera_controller.dart';
 import '../ocr_controller.dart';
 
 part 'homescreen_state.dart';
 
 class AddRecipeCubit extends Cubit<AddRecipeState> {
-  AddRecipeCubit({required this.ocrController, required this.cameraController})
+  AddRecipeCubit(
+      {required this.pdfController,
+      required this.billGetRepo,
+      required this.ocrController,
+      required this.cameraController})
       : super(AddRecipeState.initail());
 
   final CameraController cameraController;
   final OcrController ocrController;
+  final PdfController pdfController;
+  final BillGetRepo billGetRepo;
 
   Future<void> initCamera() async {
     emit(AddRecipeState.initail());
@@ -66,5 +76,29 @@ class AddRecipeCubit extends Cubit<AddRecipeState> {
         date: Timestamp.fromDate(date ?? DateTime.now()),
         companyName: companyName,
         listHelper: stringListHelper));
+  }
+
+  createPdf() async {
+    try {
+      emit(state.copyWith(isBusyl: true, status: 'ładuje dane'));
+      List<DocumentModel> dataFetched = await billGetRepo.getAlldocuments();
+      emit(state.copyWith(
+          isBusyl: true, status: 'Generuje pdf, to mi chwile zajmie...'));
+
+      List<DocumetsToPdfModel> data =
+          await pdfController.getDocumentsToPdf(dataFetched);
+      final template = pdfController.pdfPageLayOut(data);
+      emit(state.copyWith(isBusyl: true, status: 'Już prawie gotowe...'));
+
+      final pdf = pdfController.createPdf(data, template);
+      await pdfController.previewPDF(pdf);
+      emit(
+          state.copyWith(isBusyl: false, status: 'Zakończono generowanie pdf'));
+
+      await Future.delayed(const Duration(seconds: 3));
+      emit(state.copyWith(isBusyl: false, status: ''));
+    } catch (e) {
+      emit(state.copyWith(isBusyl: false, status: e.toString()));
+    }
   }
 }

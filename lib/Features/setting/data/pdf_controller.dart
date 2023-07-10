@@ -31,7 +31,7 @@ class PdfControllerImpl implements PdfController {
                 crossAxisAlignment: pw.CrossAxisAlignment.center,
                 mainAxisSize: pw.MainAxisSize.min,
                 children: [
-                  pw.Text('Create a Simple PDF',
+                  pw.Text('Twoje Paragony',
                       textAlign: pw.TextAlign.center,
                       style: const pw.TextStyle(fontSize: 26)),
                   pw.Divider(),

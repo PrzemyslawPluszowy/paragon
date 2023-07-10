@@ -74,7 +74,6 @@ class MenuAppBarWidget extends StatelessWidget {
                     IconButton(
                         onPressed: () async {
                           if (formKey.currentState!.validate()) {
-                            print('$name ******************');
                             final newBill = DocumentModel(
                               type: type,
                               category: category,

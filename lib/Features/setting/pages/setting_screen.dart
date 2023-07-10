@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rcp_new/Features/setting/cubit/setting_cubit.dart';
 
 import '../../../../core/theme/theme.dart';
+import '../../../core/utils/dialog_confirm.dart';
 
 class GridList {
   final String title;
@@ -18,7 +19,14 @@ class GridList {
 List<GridList> menu = [
   GridList(
       onTap: (BuildContext context) {
-        context.read<SettingCubit>().logOut();
+        DialogConfirm.confirmDialog(
+          content: 'Czy na pewno chcesz się wylogować?',
+          context: context,
+          title: 'Wyloguj',
+          onConfirm: () {
+            context.read<SettingCubit>().logOut();
+          },
+        );
       },
       title: 'Wyloguj',
       icon: Icons.logout),
@@ -26,26 +34,56 @@ List<GridList> menu = [
   // delete account
   GridList(
       onTap: (BuildContext context) {
-        context.read<SettingCubit>().delteAccount(context);
+        // context.read<SettingCubit>().delteAccount(context);
+        DialogConfirm.confirmDialog(
+          content: 'Czy na pewno chcesz usunąć konto?',
+          context: context,
+          title: 'Usuń konto',
+          onConfirm: () {
+            context.read<SettingCubit>().delteAccount(context);
+          },
+        );
       },
       title: 'Usuń konto',
       icon: Icons.delete),
   GridList(
       onTap: (BuildContext context) {
-        context.read<SettingCubit>().changePass();
+        // context.read<SettingCubit>().changePass();
+        DialogConfirm.confirmDialog(
+          content: 'Czy na pewno chcesz zmienić hasło?',
+          context: context,
+          title: 'Zmień hasło',
+          onConfirm: () {
+            context.read<SettingCubit>().changePass();
+          },
+        );
       },
       title: 'Zmień hasło',
       icon: Icons.lock),
   GridList(
       onTap: (BuildContext context) async {
-        await context.read<SettingCubit>().deleteAllDatta(context);
+        // await context.read<SettingCubit>().deleteAllDatta(context);
+        DialogConfirm.confirmDialog(
+          content: 'Czy na pewno chcesz usunąć dane?',
+          context: context,
+          title: 'Usuń dane',
+          onConfirm: () {
+            context.read<SettingCubit>().deleteAllDatta(context);
+          },
+        );
       },
       title: 'Wykasuj dane',
       icon: Icons.delete_forever),
   //exportuj dane
   GridList(
     onTap: (BuildContext context) async {
-      await context.read<SettingCubit>().createPdf();
+      DialogConfirm.confirmDialog(
+          context: context,
+          title: 'Eksportuj dane',
+          content: 'Eksportowanie danych może zająć chwilę,bądź cierpliwy.',
+          onConfirm: () {
+            context.read<SettingCubit>().createPdf();
+          });
     },
     title: 'Eksportuj dane',
     icon: Icons.upload_file,

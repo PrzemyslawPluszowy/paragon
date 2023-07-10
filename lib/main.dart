@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:rcp_new/Features/bil_screen/cubit/bill_cubit.dart';
 import 'package:rcp_new/Features/category_select/cubit/category_select_cubit.dart';
 import 'package:rcp_new/Features/documents/cubit/documets_screen_cubit.dart';
 import 'package:rcp_new/Features/setting/cubit/setting_cubit.dart';
@@ -12,6 +11,7 @@ import 'Features/auth_screens/presentation/cubit/forget_pass_cubit.dart';
 import 'Features/auth_screens/presentation/cubit/login_cubit.dart';
 import 'Features/auth_screens/presentation/cubit/register_cubit.dart';
 import 'Features/auth_screens/presentation/pages/login_screen.dart';
+import 'Features/bil_edit/cubit/bill_cubit.dart';
 import 'Features/choise_mode_screen/cubit/homescreen_cubit.dart';
 import 'Features/main_screen/cubit/mainscreen_cubit.dart';
 import 'Features/main_screen/pages/main_screen.dart';
@@ -49,7 +49,10 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => MainscreenCubit()),
         BlocProvider(
             create: (context) => AddRecipeCubit(
-                cameraController: getIt.call(), ocrController: getIt.call())),
+                cameraController: getIt.call(),
+                ocrController: getIt.call(),
+                billGetRepo: getIt.call(),
+                pdfController: getIt.call())),
         BlocProvider(create: (context) => BillCubit(billRepo: getIt.call())),
         BlocProvider(create: (context) => CategorySelectCubit()..sortList()),
         BlocProvider(

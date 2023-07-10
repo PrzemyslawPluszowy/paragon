@@ -210,7 +210,7 @@ class _BillAddScreenState extends State<BillAddScreen> {
                           ),
                           CustomTextFormField(
                             onTap: () {
-                              context.push('/main/bill/select',
+                              context.push('/bill/select',
                                   extra: _categoryController);
                             },
                             isClickable: false,

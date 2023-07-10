@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../core/theme/theme.dart';
 
@@ -29,6 +30,7 @@ class CustomTextFormField extends StatelessWidget {
         horizontal: 20,
       ),
       child: TextFormField(
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         controller: textEditingController,
         style: const TextStyle(color: Color.fromARGB(255, 46, 20, 81)),
         onTap: () {

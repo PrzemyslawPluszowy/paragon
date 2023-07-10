@@ -12,7 +12,7 @@ import 'package:rcp_new/core/data/bill_model.dart';
 
 import '../../auth_screens/repository.dart';
 import '../../documents/cubit/documets_screen_cubit.dart';
-import '../models/pdfData.dart';
+import '../models/pdf_model.dart';
 
 part 'setting_state.dart';
 
